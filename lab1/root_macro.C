@@ -20,7 +20,6 @@ class macro {
   }
 
   TF1* cos_function(double norm = 1.) {
-    // now includes an overall amplitude parameter [3] so the function can be renormalized
     TF1* cos = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
     cos->SetParameters(k_, phi_, b_, norm);
     return cos;
@@ -28,14 +27,24 @@ class macro {
 
   TGraph* random_generation_graph(int n) {
     std::vector<double> vx, vy;
-    for (float i{0.f}; i < 0.6f; i += 0.6 / n) {
-      double upper_bound = cos_function()->Eval(i);
-      double y           = gRandom->Uniform(0., 1.2);
-      if (y <= upper_bound) {
-        vx.push_back(i);
-        vy.push_back(y);
-      }
-    }
+    // for (float i{0.f}; i < 0.6f; i += 0.6 / n) {
+    //   double upper_bound = cos_function()->Eval(i);
+    //   double y           = gRandom->Uniform(0., 1.2);
+    //   if (y <= upper_bound) {
+    //     vx.push_back(i);
+    //     vy.push_back(y);
+    //   }
+    // }
+    //OPPURE
+    for (int i{0}; i < n; ++i) {
+       double x = gRandom->Uniform(0., 0.6);
+       double upper_bound = cos_function()->Eval(x);
+       double y = gRandom->Uniform(0., 1.2);
+       if (y <= upper_bound) {
+         vx.push_back(x);
+         vy.push_back(y);
+       }
+     }
     TGraph* graph = new TGraph(vx.size(), &vx[0], &vy[0]);
     return graph;
   }
@@ -70,7 +79,9 @@ class macro {
     std::vector<double> diff, sigma;
     auto binWidth = 0.6 / b;
     for (int i = 0; i < b; ++i) {
-      auto cosIntegral = cosScaled->Integral(i, i + binWidth);
+      double xlow = hist1->GetBinLowEdge(i+1);
+      double xup = hist1->GetBinLowEdge(i+2);
+      double cosIntegral = cosScaled->Integral(xlow, xup);
       diff.push_back(cosIntegral - hist1->GetBinContent(i));
       sigma.push_back(cosIntegral);
       // std::cout << "Differnenza bin " << i << " " << cosIntegral - hist1->GetBinContent(i) << "\n";
@@ -98,7 +109,7 @@ class macro {
     c1->SaveAs("grafico.png");
 
     TCanvas* c2 = new TCanvas("c2", "Estrazione punti", 800, 600);
-    random_generation_graph(10000)->Draw();
+    random_generation_graph(10000)->Draw("AP");
     c2->SaveAs("punti.png");
 
     TCanvas* c3 = new TCanvas("c3", "Istogramma", 800, 600);
