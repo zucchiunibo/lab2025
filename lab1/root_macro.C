@@ -77,7 +77,6 @@ class macro {
         entries += 1;
       }
     }
-    std::cout << "entries: " << entries << '\n';
     static int histCount = 0;
     TH1F* hist = new TH1F(Form("hist_%d", histCount++), "Istogramma Occorrenze", b, 0, 0.6);
     for (double val : vx)
