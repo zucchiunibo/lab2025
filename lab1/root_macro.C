@@ -1,4 +1,5 @@
 #include "TGraph.h"
+#include "TGraphErrors.h"
 #include <TCanvas.h>
 #include <TF1.h>
 #include <TFile.h>
@@ -77,9 +78,8 @@ class macro {
         entries += 1;
       }
     }
-    std::cout << "entries: " << entries << '\n';
     static int histCount = 0;
-    TH1F* hist = new TH1F(Form("hist_%d", histCount++), "Istogramma Occorrenze", b, 0, 0.6);
+    TH1F* hist           = new TH1F(Form("hist_%d", histCount++), "Istogramma Occorrenze", b, 0, 0.6);
     for (double val : vx)
       hist->Fill(val);
 
@@ -103,9 +103,8 @@ class macro {
       double xlow        = hist1->GetBinLowEdge(i + 1);
       double xup         = hist1->GetBinLowEdge(i + 2);
       double cosIntegral = cosScaled->Integral(xlow, xup);
-      diff.push_back(cosIntegral - hist1->GetBinContent(i));
+      diff.push_back(cosIntegral - hist1->GetBinContent(i + 1));
       sigma.push_back(cosIntegral);
-      // std::cout << "Differnenza bin " << i << " " << cosIntegral - hist1->GetBinContent(i) << "\n";
     }
 
     double chiSquared;
@@ -146,15 +145,21 @@ class macro {
       sigma[i] = sqrt(sigma[i] / (nGenerazioni - 1));
     }
 
-    TGraph* gSigma = new TGraph(nBin);
-    for (int i = 0; i < nBin; ++i)
-      gSigma->SetPoint(i, i, sigma[i]); //Argomenti: pos in lista, x, y
-
+    TGraphErrors* gSigma = new TGraphErrors(nBin);
+    for (int i = 0; i < nBin; ++i) {
+      gSigma->SetPoint(i, i, media[i]);
+      gSigma->SetPointError(i, 0., sigma[i]); // Argomenti: pos in lista, x, y
+    }
+    
     TCanvas* c = new TCanvas("c_sigma", "Incertezze per bin", 800, 600);
     gSigma->SetTitle("Fluttuazioni bin; Bin; Deviazione standard");
     gSigma->SetMarkerStyle(20);
     gSigma->Draw("AP");
     c->SaveAs("sigma.png");
+  }
+
+  void binSmearing(int n = 1000, int b = 50) {
+    TH1F* hist1 = (TH1F*)(random_generation_hist(n, b)->Clone("hist1"));
   }
 
   void draw() {
