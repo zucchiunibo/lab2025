@@ -161,40 +161,76 @@ class macro {
     }
   }
 
-  void fit() {
-    TF1* cos = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
-    cos->SetParameters(k_, phi_, b_);
-    TH1F *hist = random_generation_hist(10000, 50);
-    auto freepar = hist->Fit(cos, "RSQ");
-    TF1* cos1 = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
-    cos1->FixParameter(0, k_);
-    cos1->FixParameter(1, phi_);
-    cos1->FixParameter(2, b_);
-    auto fixpar = hist->Fit(cos1, "RSQ");
+void fit() {
+  TF1* cos = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
+  cos->SetParameters(k_, phi_, b_);
+  TH1F *hist = random_generation_hist(10000, 50);
 
-    int statusfree = freepar->Status();
-    int statusfix = fixpar->Status();
-    std::ofstream ofs("Fit.txt");
-      if(!ofs.is_open()){
-        std::cout << "Error" << '\n';
-      }
-    ofs << "# Fit results\n";
-    ofs << "# Status: " << statusfree << "\n";
-    ofs << "# Function: " << cos->GetName() << "\n";
+  // Fit con parametri liberi
+  auto freepar = hist->Fit(cos, "RSQ");
 
-    double chi2 = cos->GetChisquare();
-    int ndf     = cos->GetNDF();
-    ofs << "# Chi2 NDF\n" << chi2 << " " << ndf << "\n";
+  // Fit con parametri fissati
+  TF1* cos1 = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
+  cos1->FixParameter(0, k_);
+  cos1->FixParameter(1, phi_);
+  cos1->FixParameter(2, b_);
+  auto fixpar = hist->Fit(cos1, "RSQ");
 
-    int npar = cos->GetNpar();
-    ofs << "# NParameters: " << npar << "\n";
-    ofs << "Index,Name,Value,Error\n";
-    for (int i = 0; i < npar; ++i) {
-      const char* pname = cos->GetParName(i) ? cos->GetParName(i) : "";
-      ofs << i << "," << pname << "," << cos->GetParameter(i) << "," << cos->GetParError(i) << "\n";
-    }
-    ofs.close();
+  int statusfree = freepar->Status();
+  int statusfix  = fixpar->Status();
+
+  std::ofstream ofs("Fit.md");
+  if(!ofs.is_open()){
+    std::cout << "Errore apertura file\n";
+    return;
   }
+
+  ofs << "# Risultati del Fit\n\n";
+
+  ofs << "## Fit con parametri liberi\n\n";
+  ofs << "- **Status:** " << statusfree << "\n";
+  ofs << "- **Funzione:** `" << cos->GetName() << "`\n";
+
+  double chi2_free = cos->GetChisquare();
+  int ndf_free     = cos->GetNDF();
+  ofs << "- **Chi² / NDF:** " << chi2_free << " / " << ndf_free << "\n\n";
+
+  int npar_free = cos->GetNpar();
+  ofs << "| Index | Name | Value | Error |\n";
+  ofs << "|:------:|:------|:------:|:------:|\n";
+  for (int i = 0; i < npar_free; ++i) {
+    const char* pname = cos->GetParName(i) ? cos->GetParName(i) : "";
+    ofs << "| " << i 
+        << " | " << pname 
+        << " | " << cos->GetParameter(i) 
+        << " | " << cos->GetParError(i) 
+        << " |\n";
+  }
+
+  ofs << "\n---\n\n";
+  ofs << "## Fit con parametri fissati\n\n";
+  ofs << "- **Status:** " << statusfix << "\n";
+  ofs << "- **Funzione:** `" << cos1->GetName() << "`\n";
+
+  double chi2_fix = cos1->GetChisquare();
+  int ndf_fix     = cos1->GetNDF();
+  ofs << "- **Chi² / NDF:** " << chi2_fix << " / " << ndf_fix << "\n\n";
+
+  int npar_fix = cos1->GetNpar();
+  ofs << "| Index | Name | Value | Error |\n";
+  ofs << "|:------:|:------|:------:|:------:|\n";
+  for (int i = 0; i < npar_fix; ++i) {
+    const char* pname = cos1->GetParName(i) ? cos1->GetParName(i) : "";
+    ofs << "| " << i 
+        << " | " << pname 
+        << " | " << cos1->GetParameter(i) 
+        << " | " << cos1->GetParError(i) 
+        << " |\n";
+  }
+
+  ofs.close();
+}
+
 
   void draw() {
     TCanvas* c1 = new TCanvas("c1", "Funzione coseno", 800, 600);
