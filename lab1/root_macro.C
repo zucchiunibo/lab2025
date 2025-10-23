@@ -7,6 +7,8 @@
 #include <TRandom.h>
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <TFitResult.h>
 
 class macro {
   double k_;
@@ -61,7 +63,7 @@ class macro {
     return hist;
   }
 
-  void accordo(int n = 1000, int b = 50) { // normalizza HIST e TF1
+  void accordo(int n = 10000, int b = 50) { // normalizza HIST e TF1
     TH1F* hist1 = (TH1F*)(random_generation_hist(n, b)->Clone("hist1"));
     hist1->Scale(1. / hist1->Integral()), "width";
 
@@ -140,7 +142,7 @@ class macro {
     return {media, sigma};
   }
 
-  void binSmearing(int n = 1000, int b = 50, int gauss=30) {
+  void binSmearing(int b = 50, int gauss=30) {
     bin_mean_sigma bin = rigenerazione_incertezze();
     std::vector<double> g_media(b, 0.0);
     std::vector<double> g_media_2(b, 0.0);
@@ -159,7 +161,40 @@ class macro {
     }
   }
 
-  
+  void fit() {
+    TF1* cos = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
+    cos->SetParameters(k_, phi_, b_);
+    TH1F *hist = random_generation_hist(10000, 50);
+    auto freepar = hist->Fit(cos, "RSQ");
+    TF1* cos1 = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
+    cos1->FixParameter(0, k_);
+    cos1->FixParameter(1, phi_);
+    cos1->FixParameter(2, b_);
+    auto fixpar = hist->Fit(cos1, "RSQ");
+
+    int statusfree = freepar->Status();
+    int statusfix = fixpar->Status();
+    std::ofstream ofs("Fit.txt");
+      if(!ofs.is_open()){
+        std::cout << "Error" << '\n';
+      }
+    ofs << "# Fit results\n";
+    ofs << "# Status: " << statusfree << "\n";
+    ofs << "# Function: " << cos->GetName() << "\n";
+
+    double chi2 = cos->GetChisquare();
+    int ndf     = cos->GetNDF();
+    ofs << "# Chi2 NDF\n" << chi2 << " " << ndf << "\n";
+
+    int npar = cos->GetNpar();
+    ofs << "# NParameters: " << npar << "\n";
+    ofs << "Index,Name,Value,Error\n";
+    for (int i = 0; i < npar; ++i) {
+      const char* pname = cos->GetParName(i) ? cos->GetParName(i) : "";
+      ofs << i << "," << pname << "," << cos->GetParameter(i) << "," << cos->GetParError(i) << "\n";
+    }
+    ofs.close();
+  }
 
   void draw() {
     TCanvas* c1 = new TCanvas("c1", "Funzione coseno", 800, 600);
@@ -176,3 +211,4 @@ class macro {
     c3->SaveAs("istogramma.png");
   }
 };
+

@@ -1,0 +1,11 @@
+# Fit results
+# Status: 0
+# Function: Funzione coseno
+# Chi2 NDF
+56.8952 46
+# NParameters: 4
+Index,Name,Value,Error
+0,p0,5.19189,0.0945058
+1,p1,1.78597,0.0279272
+2,p2,0.192478,0.0156977
+3,p3,166.146,3.97073

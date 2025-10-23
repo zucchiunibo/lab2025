@@ -3,9 +3,11 @@
 int main(int arcg, char** argv) {
     gRandom->SetSeed(0);
     macro test;
-    test.draw(); // ciao
+    test.draw();
     test.accordo(10000, 100);
-    test.rigenerazione_incertezze();
-    test.binSmearing();
+    // test.rigenerazione_incertezze();
+    // test.binSmearing();
+    test.fit();
+    
     return 0;
 }
