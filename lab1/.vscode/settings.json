@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "root_macro.C": "cpp"
+        "root_macro.C": "cpp",
+        "iostream": "cpp"
     }
 }

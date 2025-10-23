@@ -28,15 +28,6 @@ class macro {
 
   TGraph* random_generation_graph(int n) {
     std::vector<double> vx, vy;
-    // for (float i{0.f}; i < 0.6f; i += 0.6 / n) {
-    //   double upper_bound = cos_function()->Eval(i);
-    //   double y           = gRandom->Uniform(0., 1.2);
-    //   if (y <= upper_bound) {
-    //     vx.push_back(i);
-    //     vy.push_back(y);
-    //   }
-    // }
-    // OPPURE
     for (int i{0}; i < n; ++i) {
       double x           = gRandom->Uniform(0., 0.6);
       double upper_bound = cos_function()->Eval(x);
@@ -49,22 +40,6 @@ class macro {
     TGraph* graph = new TGraph(vx.size(), &vx[0], &vy[0]);
     return graph;
   }
-
-  // TH1F* random_generation_hist(int n, int b) {
-  //   std::vector<double> vx, vy;
-  //   for (float i{0.f}; i < 0.6f; i += 0.6 / n) {
-  //     double upper_bound = cos_function()->Eval(i);
-  //     double y           = gRandom->Uniform(0., 1.2);
-  //     if (y <= upper_bound) {
-  //       vx.push_back(i);
-  //     }
-  //   }
-  //   TH1F* hist = new TH1F("hist", "Istogramma Occorrenze", b, 0, 0.6);
-  //   for (unsigned int i{0}; i < vx.size(); ++i) {
-  //     hist->Fill(vx[i], 1);
-  //   }
-  //   return hist;
-  // }
 
   TH1F* random_generation_hist(int n, int b) {
     std::vector<double> vx;
@@ -123,7 +98,12 @@ class macro {
     c5->SaveAs("cos_scalato.png");
   }
 
-  void rigenerazione_incertezze(int nGenerazioni = 100, int nEventi = 10000, int nBin = 50) {
+  struct bin_mean_sigma{
+    std::vector<double> media;
+    std::vector<double> sigma;
+  };
+
+  bin_mean_sigma rigenerazione_incertezze(int nGenerazioni = 100, int nEventi = 10000, int nBin = 50) {
     std::vector<TH1F*> histSet;
 
     for (int i = 0; i < nGenerazioni; ++i) {
@@ -156,11 +136,30 @@ class macro {
     gSigma->SetMarkerStyle(20);
     gSigma->Draw("AP");
     c->SaveAs("sigma.png");
+
+    return {media, sigma};
   }
 
-  void binSmearing(int n = 1000, int b = 50) {
-    TH1F* hist1 = (TH1F*)(random_generation_hist(n, b)->Clone("hist1"));
+  void binSmearing(int n = 1000, int b = 50, int gauss=30) {
+    bin_mean_sigma bin = rigenerazione_incertezze();
+    std::vector<double> g_media(b, 0.0);
+    std::vector<double> g_media_2(b, 0.0);
+    std::vector<double> g_sigma(b, 0.0);
+ 
+    for (int i{0}; i < b; ++i) {
+      for (int j{0}; j < gauss; ++j) {
+        double bincontent = gRandom->Gaus(bin.media[i], bin.sigma[i]);
+        g_media[i]+=bincontent;
+        g_media_2[i]+= bincontent * bincontent;
+      }
+      g_media[i] /= gauss;
+      g_media_2[i] /= gauss;
+      g_sigma[i] = std::sqrt(g_media_2[i] - std::pow(g_media[i], 2));
+      std::cout << "sigma_dist: " << std::abs(bin.sigma[i] - g_sigma[i]) << '\n';
+    }
   }
+
+  
 
   void draw() {
     TCanvas* c1 = new TCanvas("c1", "Funzione coseno", 800, 600);
