@@ -5,8 +5,9 @@ int main(int arcg, char** argv) {
     macro test;
     test.draw();
     test.accordo(10000, 100);
-    // test.rigenerazione_incertezze();
+    test.rigenerazione_incertezze();
     // test.binSmearing();
+    test.gaussian_parameters();
     test.fit();
     
     return 0;

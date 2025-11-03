@@ -43,13 +43,14 @@ class macro {
     return graph;
   }
 
-  TH1F* random_generation_hist(int n, int b) {
+  TH1F* random_generation_hist(int n, int b, TF1* f = nullptr) {
+    if (!f) f = cos_function();
     std::vector<double> vx;
     int entries = 0;
     for (int i = 0; i < n; ++i) {
       double x           = gRandom->Uniform(0., 0.6);
       double y           = gRandom->Uniform(0., 1.2);
-      double upper_bound = cos_function()->Eval(x);
+      double upper_bound = f->Eval(x);
       if (y <= upper_bound) {
         vx.push_back(x);
         entries += 1;
@@ -96,6 +97,7 @@ class macro {
     hist1->Draw("HIST");
     c4->SaveAs("istrogramma_norm.png");
     TCanvas* c5 = new TCanvas("c5", "Coseno scalato", 800, 600);
+    cosScaled->SetTitle("Funzione normalizzata");
     cosScaled->Draw();
     c5->SaveAs("cos_scalato.png");
   }
@@ -161,90 +163,135 @@ class macro {
     }
   }
 
-void fit() {
-  TF1* cos = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
-  cos->SetParameters(k_, phi_, b_);
-  TH1F *hist = random_generation_hist(10000, 50);
+  void gaussian_parameters(int n_generazioni = 100, int n_eventi = 10000, int bins = 50) {
+    std::vector<TH1F*> hist_list;
+    TF1* cos_g = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
+    double cosInt = cos_g->Integral(0., 0.6);
+    TF1* cosScaled_g = (TF1*)(cos_g->Clone("cosScaled_g"));
+    cosScaled_g->SetParameter(3, 1 / cosInt);
 
-  // Fit con parametri liberi
-  auto freepar = hist->Fit(cos, "RSQ");
+    for (int i{0}; i < n_generazioni; ++i) {
+    double k = gRandom->Gaus(k_, k_*0.01);
+    double phi = gRandom->Gaus(phi_, phi_*0.05);
+    double b = gRandom->Gaus(b_, b_*0.01);
+    
+    cosScaled_g->SetParameters(k, phi, b);
+    hist_list.push_back(random_generation_hist(n_eventi, bins, cosScaled_g));
+    }
 
-  // Fit con parametri fissati
-  TF1* cos1 = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
-  cos1->FixParameter(0, k_);
-  cos1->FixParameter(1, phi_);
-  cos1->FixParameter(2, b_);
-  auto fixpar = hist->Fit(cos1, "RSQ");
+    std::vector<double> media(bins, 0.0);
+    std::vector<double> sigma(bins, 0.0);
 
-  int statusfree = freepar->Status();
-  int statusfix  = fixpar->Status();
+    for (int i = 0; i < bins; ++i) {
+      for (auto& h : hist_list)
+        media[i] += h->GetBinContent(i + 1);
+      media[i] /= n_generazioni;
+    }
 
-  std::ofstream ofs("Fit.md");
-  if(!ofs.is_open()){
-    std::cout << "Errore apertura file\n";
-    return;
+    for (int i = 0; i < bins; ++i) {
+      for (auto& h : hist_list)
+        sigma[i] += pow(h->GetBinContent(i + 1) - media[i], 2);
+      sigma[i] = sqrt(sigma[i] / (n_generazioni - 1));
+    }
+
+    TGraphErrors* gSigma = new TGraphErrors(bins);
+    for (int i = 0; i < bins; ++i) {
+      gSigma->SetPoint(i, i, media[i]);
+      gSigma->SetPointError(i, 0., sigma[i]); // Argomenti: pos in lista, x, y
+    }
+    
+    TCanvas* c6 = new TCanvas("c_sigma_g", "Incertezze per bin con parametri aleatori", 800, 600);
+    gSigma->SetTitle("Fluttuazioni bin; Bin; Deviazione standard");
+    gSigma->SetMarkerStyle(20);
+    gSigma->Draw("AP");
+    c6->SaveAs("sigma_g.png");
   }
 
-  ofs << "# Risultati del Fit\n\n";
+  void fit() {
+    TF1* cos = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
+    cos->SetParameters(k_, phi_, b_);
+    TH1F *hist = random_generation_hist(10000, 50);
 
-  ofs << "## Fit con parametri liberi\n\n";
-  ofs << "- **Status:** " << statusfree << "\n";
-  ofs << "- **Funzione:** `" << cos->GetName() << "`\n";
+    // Fit con parametri liberi
+    auto freepar = hist->Fit(cos, "RSQ");
 
-  double chi2_free = cos->GetChisquare();
-  int ndf_free     = cos->GetNDF();
-  ofs << "- **Chi² / NDF:** " << chi2_free << " / " << ndf_free << "\n\n";
+    // Fit con parametri fissati
+    TF1* cos1 = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
+    cos1->FixParameter(0, k_);
+    cos1->FixParameter(1, phi_);
+    cos1->FixParameter(2, b_);
+    auto fixpar = hist->Fit(cos1, "RSQ");
 
-  int npar_free = cos->GetNpar();
-  ofs << "| Index | Name | Value | Error |\n";
-  ofs << "|:------:|:------|:------:|:------:|\n";
-  for (int i = 0; i < npar_free; ++i) {
-    const char* pname = cos->GetParName(i) ? cos->GetParName(i) : "";
-    ofs << "| " << i 
-        << " | " << pname 
-        << " | " << cos->GetParameter(i) 
-        << " | " << cos->GetParError(i) 
-        << " |\n";
+    int statusfree = freepar->Status();
+    int statusfix  = fixpar->Status();
+
+    std::ofstream ofs("Fit.md");
+    if(!ofs.is_open()){
+      std::cout << "Errore apertura file\n";
+      return;
+    }
+
+    ofs << "# Risultati del Fit\n\n";
+
+    ofs << "## Fit con parametri liberi\n\n";
+    ofs << "- **Status:** " << statusfree << "\n";
+    ofs << "- **Funzione:** `" << cos->GetName() << "`\n";
+
+    double chi2_free = cos->GetChisquare();
+    int ndf_free     = cos->GetNDF();
+    ofs << "- **Chi² / NDF:** " << chi2_free << " / " << ndf_free << "\n\n";
+
+    int npar_free = cos->GetNpar();
+    ofs << "| Index | Name | Value | Error |\n";
+    ofs << "|:------:|:------|:------:|:------:|\n";
+    for (int i = 0; i < npar_free; ++i) {
+      const char* pname = cos->GetParName(i) ? cos->GetParName(i) : "";
+      ofs << "| " << i 
+          << " | " << pname 
+          << " | " << cos->GetParameter(i) 
+          << " | " << cos->GetParError(i) 
+          << " |\n";
+    }
+
+    ofs << "\n---\n\n";
+    ofs << "## Fit con parametri fissati\n\n";
+    ofs << "- **Status:** " << statusfix << "\n";
+    ofs << "- **Funzione:** `" << cos1->GetName() << "`\n";
+
+    double chi2_fix = cos1->GetChisquare();
+    int ndf_fix     = cos1->GetNDF();
+    ofs << "- **Chi² / NDF:** " << chi2_fix << " / " << ndf_fix << "\n\n";
+
+    int npar_fix = cos1->GetNpar();
+    ofs << "| Index | Name | Value | Error |\n";
+    ofs << "|:------:|:------|:------:|:------:|\n";
+    for (int i = 0; i < npar_fix; ++i) {
+      const char* pname = cos1->GetParName(i) ? cos1->GetParName(i) : "";
+      ofs << "| " << i 
+          << " | " << pname 
+          << " | " << cos1->GetParameter(i) 
+          << " | " << cos1->GetParError(i) 
+          << " |\n";
+    }
+
+    ofs.close();
   }
 
-  ofs << "\n---\n\n";
-  ofs << "## Fit con parametri fissati\n\n";
-  ofs << "- **Status:** " << statusfix << "\n";
-  ofs << "- **Funzione:** `" << cos1->GetName() << "`\n";
 
-  double chi2_fix = cos1->GetChisquare();
-  int ndf_fix     = cos1->GetNDF();
-  ofs << "- **Chi² / NDF:** " << chi2_fix << " / " << ndf_fix << "\n\n";
+    void draw() {
+      TCanvas* c1 = new TCanvas("c1", "Funzione coseno", 800, 600);
+      cos_function()->SetTitle("Funzione");
+      cos_function()->Draw();
+      c1->SaveAs("grafico.png");
 
-  int npar_fix = cos1->GetNpar();
-  ofs << "| Index | Name | Value | Error |\n";
-  ofs << "|:------:|:------|:------:|:------:|\n";
-  for (int i = 0; i < npar_fix; ++i) {
-    const char* pname = cos1->GetParName(i) ? cos1->GetParName(i) : "";
-    ofs << "| " << i 
-        << " | " << pname 
-        << " | " << cos1->GetParameter(i) 
-        << " | " << cos1->GetParError(i) 
-        << " |\n";
-  }
+      TCanvas* c2 = new TCanvas("c2", "Estrazione punti", 800, 600);
+      random_generation_graph(10000)->Draw("AP");
+      c2->SaveAs("punti.png");
 
-  ofs.close();
-}
-
-
-  void draw() {
-    TCanvas* c1 = new TCanvas("c1", "Funzione coseno", 800, 600);
-    cos_function()->Draw();
-    c1->SaveAs("grafico.png");
-
-    TCanvas* c2 = new TCanvas("c2", "Estrazione punti", 800, 600);
-    random_generation_graph(10000)->Draw("AP");
-    c2->SaveAs("punti.png");
-
-    TCanvas* c3 = new TCanvas("c3", "Istogramma", 800, 600);
-    random_generation_hist(10000, 50)->Draw();
-    // cos_function()->Draw();
-    c3->SaveAs("istogramma.png");
-  }
+      TCanvas* c3 = new TCanvas("c3", "Istogramma", 800, 600);
+      random_generation_hist(10000, 50)->Draw();
+      // cos_function()->Draw();
+      c3->SaveAs("istogramma.png");
+    }
 };
 
