@@ -165,17 +165,21 @@ class macro {
 
   void gaussian_parameters(int n_generazioni = 100, int n_eventi = 10000, int bins = 50) {
     std::vector<TH1F*> hist_list;
-    TF1* cos_g = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
-    double cosInt = cos_g->Integral(0., 0.6);
-    TF1* cosScaled_g = (TF1*)(cos_g->Clone("cosScaled_g"));
-    cosScaled_g->SetParameter(3, 1 / cosInt);
+    // TF1* cos_g = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
+    // double cosInt = cos_g->Integral(0., 0.6);
+    // TF1* cosScaled_g = (TF1*)(cos_g->Clone("cosScaled_g"));
+    // cosScaled_g->SetParameter(3, 1 / cosInt);
 
     for (int i{0}; i < n_generazioni; ++i) {
     double k = gRandom->Gaus(k_, k_*0.01);
     double phi = gRandom->Gaus(phi_, phi_*0.05);
     double b = gRandom->Gaus(b_, b_*0.01);
     
-    cosScaled_g->SetParameters(k, phi, b);
+    TF1* cos_g = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
+    cos_g->SetParameters(k, phi, b);
+    double cosInt = cos_g->Integral(0., 0.6);
+    TF1* cosScaled_g = (TF1*)(cos_g->Clone("cosScaled_g"));
+    cosScaled_g->SetParameter(3, 1 / cosInt);
     hist_list.push_back(random_generation_hist(n_eventi, bins, cosScaled_g));
     }
 
