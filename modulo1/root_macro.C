@@ -44,7 +44,7 @@ class macro {
   }
 
   TH1F* random_generation_hist(int n, int b, TF1* f = nullptr) {
-    if (!f)
+    if (f == nullptr)
       f = cos_function();
     std::vector<double> vx;
     int entries = 0;
@@ -108,7 +108,7 @@ class macro {
     std::vector<double> sigma;
   };
 
-  bin_mean_sigma rigenerazione_incertezze(int nGenerazioni = 100, int nEventi = 10000, int nBin = 50, TF1* f = nullptr) {
+  bin_mean_sigma rigenerazione_incertezze(int nGenerazioni = 100, int nEventi = 10000, int nBin = 50, TF1* f = nullptr, bool print = true) {
     std::vector<TH1F*> histSet;
 
     for (int i = 0; i < nGenerazioni; ++i) {
@@ -135,12 +135,13 @@ class macro {
       gSigma->SetPoint(i, i, media[i]);
       gSigma->SetPointError(i, 0., sigma[i]); // Argomenti: pos in lista, x, y
     }
-
+    if (print == true) {
     TCanvas* c = new TCanvas("c_sigma", "Incertezze per bin", 800, 600);
-    gSigma->SetTitle("Fluttuazioni bin; Bin; Deviazione standard");
+    gSigma->SetTitle("Fluttuazioni bin; Bin; Occorrenze");
     gSigma->SetMarkerStyle(20);
     gSigma->Draw("AP");
     c->SaveAs("sigma.png");
+    }
 
     return {media, sigma};
   }
@@ -166,21 +167,17 @@ class macro {
 
   void gaussian_parameters(int n_generazioni = 100, int n_eventi = 10000, int bins = 50) {
     std::vector<TH1F*> hist_list;
-    // TF1* cos_g = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
-    // double cosInt = cos_g->Integral(0., 0.6);
-    // TF1* cosScaled_g = (TF1*)(cos_g->Clone("cosScaled_g"));
-    // cosScaled_g->SetParameter(3, 1 / cosInt);
-
+ 
     for (int i{0}; i < n_generazioni; ++i) {
       double k   = gRandom->Gaus(k_, k_ * 0.01);
       double phi = gRandom->Gaus(phi_, phi_ * 0.05);
       double b   = gRandom->Gaus(b_, b_ * 0.01);
 
       TF1* cos_g = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
-      cos_g->SetParameters(k, phi, b);
+      cos_g->SetParameters(k, phi, b, 1.);
       double cosInt    = cos_g->Integral(0., 0.6);
       TF1* cosScaled_g = (TF1*)(cos_g->Clone("cosScaled_g"));
-      cosScaled_g->SetParameter(3, 1 / cosInt);
+      cosScaled_g->SetParameter(3, 1. / cosInt);
       hist_list.push_back(random_generation_hist(n_eventi, bins, cosScaled_g));
     }
 
@@ -205,6 +202,13 @@ class macro {
       gSigma->SetPointError(i, 0., sigma[i]); // Argomenti: pos in lista, x, y
     }
 
+    TCanvas* c8 = new TCanvas("overlayed_histo", "Istogrammi sovrapposti", 800, 600);
+    for (auto h : hist_list) {
+      h->Draw("same");
+    }
+    c8->SetTitle("Overlayed_histo");
+    c8->SaveAs("Hist_overlayed.png");
+
     TCanvas* c6 = new TCanvas("c_sigma_g", "Incertezze per bin con parametri aleatori", 800, 600);
     gSigma->SetTitle("Fluttuazioni bin; Bin; Deviazione standard");
     gSigma->SetMarkerStyle(20);
@@ -218,11 +222,11 @@ class macro {
     double b   = gRandom->Gaus(b_, b_ * 0.01);
 
     TF1* cos_g = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
-    cos_g->SetParameters(k, phi, b);
+    cos_g->SetParameters(k, phi, b, 1.);
     double cosInt    = cos_g->Integral(0., 0.6);
     TF1* cosScaled_g = (TF1*)(cos_g->Clone("cosScaled_g"));
     cosScaled_g->SetParameter(3, 1 / cosInt);
-    auto bin = rigenerazione_incertezze(n_generazioni, n_eventi, bins, cosScaled_g);
+    auto bin = rigenerazione_incertezze(n_generazioni, n_eventi, bins, cosScaled_g, false);
     std::vector<double> g_media(bins, 0.0);
     std::vector<double> g_media_2(bins, 0.0);
     std::vector<double> g_sigma(bins, 0.0);
