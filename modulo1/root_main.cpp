@@ -9,6 +9,7 @@ int main(int arcg, char** argv) {
     // test.binSmearing();
     test.gaussian_parameters();
     test.fit();
+    test.gaussian_smearing();
     
     return 0;
 }
