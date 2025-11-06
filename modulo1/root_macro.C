@@ -382,6 +382,7 @@ class macro {
     TCanvas* c1 = new TCanvas("c1", "Funzione coseno", 800, 600);
     cos_function()->SetTitle("Funzione");
     cos_function()->Draw();
+    
     c1->SaveAs("grafico.png");
 
     TCanvas* c2 = new TCanvas("c2", "Estrazione punti", 800, 600);
