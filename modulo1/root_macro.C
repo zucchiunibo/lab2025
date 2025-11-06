@@ -93,7 +93,7 @@ class macro {
       chiSquared += std::pow(diff[i] / std::sqrt(sigma[i]), 2);
     }
 
-    std::cout << "Chi quadro: " << chiSquared << "\n";
+    std::cout << "Chi quadro di accordo: " << chiSquared << "\n";
 
     TCanvas* c4 = new TCanvas("c4", "Hist scalato", 800, 600);
     hist1->Draw("HIST");
@@ -162,7 +162,7 @@ class macro {
       g_media[i] /= gauss;
       g_media_2[i] /= gauss;
       g_sigma[i] = std::sqrt(g_media_2[i] - std::pow(g_media[i], 2));
-      std::cout << "sigma_dist: " << std::abs(bin.sigma[i] - g_sigma[i]) << '\n';
+      // std::cout << "sigma_dist: " << std::abs(bin.sigma[i] - g_sigma[i]) << '\n';
     }
   }
 
@@ -179,10 +179,8 @@ class macro {
       double cosInt    = cos_g->Integral(0., 0.6);
       TF1* cosScaled_g = (TF1*)(cos_g->Clone("cosScaled_g"));
       cosScaled_g->SetParameter(3, 1. / cosInt);
-      std::cout << "INTEGRALE: " << cosScaled_g->Integral(0., 0.6) << '\n';
       hist_list.push_back(random_generation_hist(n_eventi, bins, cosScaled_g));
     }
-    std::cout << "INTEGRALE_histo: " << hist_list[1]->Integral(1, 50) << '\n';
 
     std::vector<double> media(bins, 0.0);
     std::vector<double> sigma(bins, 0.0);
@@ -213,7 +211,7 @@ class macro {
     c8->SaveAs("Hist_overlayed.png");
 
     TCanvas* c6 = new TCanvas("c_sigma_g", "Incertezze per bin con parametri aleatori", 800, 600);
-    gSigma->SetTitle("Fluttuazioni bin; Bin; Deviazione standard");
+    gSigma->SetTitle("Fluttuazioni bin; Bin; Occorrenze");
     gSigma->SetMarkerStyle(20);
     gSigma->Draw("AP");
     c6->SaveAs("sigma_g.png");
@@ -280,7 +278,7 @@ class macro {
     int statusfree = freepar->Status();
     int statusfix  = fixpar->Status();
 
-    std::cout << "residuo: " << residuo(cos1, hist) << '\n';
+    std::cout << "residuo: " << residuo(cos1, hist) << '\n'; // Calcolo del residuo
 
     std::ofstream ofs("Fit.md");
     if (!ofs.is_open()) {
@@ -327,15 +325,57 @@ class macro {
   }
 
   double residuo(TF1* cos, TH1F* hist, int b = 50) {
-    double chisquare;
+    double chisquare{0.};
     for (int i = 0; i < b; ++i) {
+      double content     = hist->GetBinContent(i + 1);
       double xlow        = hist->GetBinLowEdge(i + 1);
       double xup         = hist->GetBinLowEdge(i + 2);
       double cosIntegral = cos->Integral(xlow, xup);
       double mean        = cosIntegral / (xup - xlow);
-      chisquare += (std::pow(mean - hist->GetBinContent(i + 1), 2)) / cosIntegral;
+      chisquare += (std::pow(mean - content, 2)) / content; // Uso varianza poissoniana
     }
     return chisquare / cos->GetNDF();
+  }
+
+  void chi2_different_method(int nEvents = 10000, int nBins = 50) {
+    TH1F* hist = random_generation_hist(nEvents, nBins);
+
+    TF1* model = new TF1("fit_model", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
+    model->SetParameters(k_, phi_, b_, 1.0);
+
+    auto r = hist->Fit(model, "RS");
+
+    double chi2 = r->Chi2();
+    int ndf     = r->Ndf();
+
+    std::cout << "\n==== Risultati del fit diretto eseguito su un TFitResultPtr ====\n";
+    std::cout << "Chi_2 = " << chi2 << ",  NDF = " << ndf << ",  Chi_2/NDF = " << chi2 / ndf << "\n";
+
+    // Passo dalla funzione modello (fittata) nuovamente all'istogramma
+    TH1F* hmodel = (TH1F*)hist->Clone("hmodel");
+    hmodel->Reset();
+    for (int i = 1; i <= hist->GetNbinsX(); ++i) {
+      double xlow = hist->GetBinLowEdge(i);
+      double xup  = hist->GetBinLowEdge(i + 1);
+      double val  = model->Integral(xlow, xup) * nEvents / model->Integral(0., 0.6);
+      hmodel->SetBinContent(i, val);
+    }
+    double chi2_root  = hist->Chi2Test(hmodel, "CHI2");
+    double chi2NDF_rt = hist->Chi2Test(hmodel, "CHI2/NDF");
+
+    std::cout << "==== Fit dell'istogramma generato dalla funzione ====" << '\n';
+    std::cout << "Chi_2 (TH1::Chi2Test) = " << chi2_root << ", Chi_2/NDF = " << chi2NDF_rt << "\n";
+
+    TCanvas* c10 = new TCanvas("fit_direct", "Fit diretto", 800, 600);
+    hist->SetTitle("Fit diretto su istogramma; x; Conteggi");
+    hist->Draw("hist");
+    model->SetLineColor(kRed);
+    model->Draw("SAME");
+    c10->SaveAs("fit_direct.png");
+  }
+
+  void manual_Chi2(TH1F* hist, TF1* f) {
+    //Da Implementare
   }
 
   void draw() {
@@ -350,7 +390,7 @@ class macro {
 
     TCanvas* c3 = new TCanvas("c3", "Istogramma", 800, 600);
     random_generation_hist(10000, 50)->Draw();
-    // cos_function()->Draw();
+    cos_function()->Draw("same");
     c3->SaveAs("istogramma.png");
   }
 };
