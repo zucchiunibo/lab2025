@@ -212,17 +212,10 @@ class macro {
     c6->SaveAs("sigma_g.png");
   }
 
-<<<<<<< HEAD:lab1/root_macro.C
-  void fit() {
-    TF1* cos = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
-    cos->SetParameters(k_, phi_, b_);
-    TH1F* hist = random_generation_hist(10000, 50);
-=======
   void gaussian_smearing(int n_generazioni = 100, int n_eventi = 10000, int bins = 50, int gauss = 30) {
     double k   = gRandom->Gaus(k_, k_ * 0.01);
     double phi = gRandom->Gaus(phi_, phi_ * 0.05);
     double b   = gRandom->Gaus(b_, b_ * 0.01);
->>>>>>> 91172c6f64e5df3838ba19927d6b47f2115c83c9:modulo1/root_macro.C
 
     TF1* cos_g = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
     cos_g->SetParameters(k, phi, b);
@@ -234,94 +227,6 @@ class macro {
     std::vector<double> g_media_2(bins, 0.0);
     std::vector<double> g_sigma(bins, 0.0);
 
-<<<<<<< HEAD:lab1/root_macro.C
-    // Fit con parametri fissati
-    TF1* cos1 = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
-    cos1->FixParameter(0, k_);
-    cos1->FixParameter(1, phi_);
-    cos1->FixParameter(2, b_);
-    auto fixpar = hist->Fit(cos1, "RSQ");
-
-    int statusfree = freepar->Status();
-    int statusfix  = fixpar->Status();
-
-    std::cout << "residuo: " << residuo(cos1, hist) << '\n';
-
-
-    std::ofstream ofs("Fit.md");
-    if (!ofs.is_open()) {
-      std::cout << "Errore apertura file\n";
-      return;
-    }
-
-    ofs << "# Risultati del Fit\n\n";
-
-    ofs << "## Fit con parametri liberi\n\n";
-    ofs << "- **Status:** " << statusfree << "\n";
-    ofs << "- **Funzione:** `" << cos->GetName() << "`\n";
-
-    double chi2_free = cos->GetChisquare();
-    int ndf_free     = cos->GetNDF();
-    ofs << "- **Chi² / NDF:** " << chi2_free << " / " << ndf_free << "\n\n";
-
-    int npar_free = cos->GetNpar();
-    ofs << "| Index | Name | Value | Error |\n";
-    ofs << "|:------:|:------|:------:|:------:|\n";
-    for (int i = 0; i < npar_free; ++i) {
-      const char* pname = cos->GetParName(i) ? cos->GetParName(i) : "";
-      ofs << "| " << i << " | " << pname << " | " << cos->GetParameter(i) << " | " << cos->GetParError(i) << " |\n";
-    }
-
-    ofs << "\n---\n\n";
-    ofs << "## Fit con parametri fissati\n\n";
-    ofs << "- **Status:** " << statusfix << "\n";
-    ofs << "- **Funzione:** `" << cos1->GetName() << "`\n";
-
-    double chi2_fix = cos1->GetChisquare();
-    int ndf_fix     = cos1->GetNDF();
-    ofs << "- **Chi² / NDF:** " << chi2_fix << " / " << ndf_fix << "\n\n";
-
-    int npar_fix = cos1->GetNpar();
-    ofs << "| Index | Name | Value | Error |\n";
-    ofs << "|:------:|:------|:------:|:------:|\n";
-    for (int i = 0; i < npar_fix; ++i) {
-      const char* pname = cos1->GetParName(i) ? cos1->GetParName(i) : "";
-      ofs << "| " << i << " | " << pname << " | " << cos1->GetParameter(i) << " | " << cos1->GetParError(i) << " |\n";
-    }
-
-    ofs.close();
-  }
-
-  double residuo(TF1* cos, TH1F* hist, int b = 50) {
-    double diff;
-    for (int i = 0; i < b; ++i) {
-      double xlow        = hist->GetBinLowEdge(i + 1);
-      double xup         = hist->GetBinLowEdge(i + 2);
-      double cosIntegral = cos->Integral(xlow, xup);
-      double mean        = cosIntegral / (xup - xlow);
-
-      diff += std::pow(mean - hist->GetBinContent(i + 1), 2);
-    }
-    return std::sqrt(diff);
-  }
-
-  void draw() {
-    TCanvas* c1 = new TCanvas("c1", "Funzione coseno", 800, 600);
-    cos_function()->SetTitle("Funzione");
-    cos_function()->Draw();
-    c1->SaveAs("grafico.png");
-
-    TCanvas* c2 = new TCanvas("c2", "Estrazione punti", 800, 600);
-    random_generation_graph(10000)->Draw("AP");
-    c2->SaveAs("punti.png");
-
-    TCanvas* c3 = new TCanvas("c3", "Istogramma", 800, 600);
-    random_generation_hist(10000, 50)->Draw();
-    // cos_function()->Draw();
-    c3->SaveAs("istogramma.png");
-  }
-};
-=======
     for (int i{0}; i < bins; ++i) {
       for (int j{0}; j < gauss; ++j) {
         double bincontent = gRandom->Gaus(bin.media[i], bin.sigma[i]);
@@ -424,4 +329,3 @@ void draw() {
 }
 }
 ;
->>>>>>> 91172c6f64e5df3838ba19927d6b47f2115c83c9:modulo1/root_macro.C
