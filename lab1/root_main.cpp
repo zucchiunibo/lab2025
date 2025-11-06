@@ -6,7 +6,7 @@ int main(int arcg, char** argv) {
     test.draw();
     test.accordo(10000, 100);
     test.rigenerazione_incertezze();
-    // test.binSmearing();
+    test.binSmearing();
     test.gaussian_parameters();
     test.fit();
     

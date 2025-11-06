@@ -3,12 +3,12 @@
 #include <TCanvas.h>
 #include <TF1.h>
 #include <TFile.h>
+#include <TFitResult.h>
 #include <TH1F.h>
 #include <TRandom.h>
+#include <fstream>
 #include <iostream>
 #include <vector>
-#include <fstream>
-#include <TFitResult.h>
 
 class macro {
   double k_;
@@ -44,7 +44,8 @@ class macro {
   }
 
   TH1F* random_generation_hist(int n, int b, TF1* f = nullptr) {
-    if (!f) f = cos_function();
+    if (!f)
+      f = cos_function();
     std::vector<double> vx;
     int entries = 0;
     for (int i = 0; i < n; ++i) {
@@ -102,7 +103,7 @@ class macro {
     c5->SaveAs("cos_scalato.png");
   }
 
-  struct bin_mean_sigma{
+  struct bin_mean_sigma {
     std::vector<double> media;
     std::vector<double> sigma;
   };
@@ -134,7 +135,7 @@ class macro {
       gSigma->SetPoint(i, i, media[i]);
       gSigma->SetPointError(i, 0., sigma[i]); // Argomenti: pos in lista, x, y
     }
-    
+
     TCanvas* c = new TCanvas("c_sigma", "Incertezze per bin", 800, 600);
     gSigma->SetTitle("Fluttuazioni bin; Bin; Deviazione standard");
     gSigma->SetMarkerStyle(20);
@@ -144,17 +145,17 @@ class macro {
     return {media, sigma};
   }
 
-  void binSmearing(int b = 50, int gauss=30) {
+  void binSmearing(int b = 50, int gauss = 30) {
     bin_mean_sigma bin = rigenerazione_incertezze();
     std::vector<double> g_media(b, 0.0);
     std::vector<double> g_media_2(b, 0.0);
     std::vector<double> g_sigma(b, 0.0);
- 
+
     for (int i{0}; i < b; ++i) {
       for (int j{0}; j < gauss; ++j) {
         double bincontent = gRandom->Gaus(bin.media[i], bin.sigma[i]);
-        g_media[i]+=bincontent;
-        g_media_2[i]+= bincontent * bincontent;
+        g_media[i] += bincontent;
+        g_media_2[i] += bincontent * bincontent;
       }
       g_media[i] /= gauss;
       g_media_2[i] /= gauss;
@@ -171,16 +172,16 @@ class macro {
     // cosScaled_g->SetParameter(3, 1 / cosInt);
 
     for (int i{0}; i < n_generazioni; ++i) {
-    double k = gRandom->Gaus(k_, k_*0.01);
-    double phi = gRandom->Gaus(phi_, phi_*0.05);
-    double b = gRandom->Gaus(b_, b_*0.01);
-    
-    TF1* cos_g = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
-    cos_g->SetParameters(k, phi, b);
-    double cosInt = cos_g->Integral(0., 0.6);
-    TF1* cosScaled_g = (TF1*)(cos_g->Clone("cosScaled_g"));
-    cosScaled_g->SetParameter(3, 1 / cosInt);
-    hist_list.push_back(random_generation_hist(n_eventi, bins, cosScaled_g));
+      double k   = gRandom->Gaus(k_, k_ * 0.01);
+      double phi = gRandom->Gaus(phi_, phi_ * 0.05);
+      double b   = gRandom->Gaus(b_, b_ * 0.01);
+
+      TF1* cos_g = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
+      cos_g->SetParameters(k, phi, b);
+      double cosInt    = cos_g->Integral(0., 0.6);
+      TF1* cosScaled_g = (TF1*)(cos_g->Clone("cosScaled_g"));
+      cosScaled_g->SetParameter(3, 1 / cosInt);
+      hist_list.push_back(random_generation_hist(n_eventi, bins, cosScaled_g));
     }
 
     std::vector<double> media(bins, 0.0);
@@ -203,7 +204,7 @@ class macro {
       gSigma->SetPoint(i, i, media[i]);
       gSigma->SetPointError(i, 0., sigma[i]); // Argomenti: pos in lista, x, y
     }
-    
+
     TCanvas* c6 = new TCanvas("c_sigma_g", "Incertezze per bin con parametri aleatori", 800, 600);
     gSigma->SetTitle("Fluttuazioni bin; Bin; Deviazione standard");
     gSigma->SetMarkerStyle(20);
@@ -214,7 +215,7 @@ class macro {
   void fit() {
     TF1* cos = new TF1("Funzione coseno", "[3]*((cos([0]*x + [1]))^2 + [2])", 0., 0.6);
     cos->SetParameters(k_, phi_, b_);
-    TH1F *hist = random_generation_hist(10000, 50);
+    TH1F* hist = random_generation_hist(10000, 50);
 
     // Fit con parametri liberi
     auto freepar = hist->Fit(cos, "RSQ");
@@ -229,8 +230,11 @@ class macro {
     int statusfree = freepar->Status();
     int statusfix  = fixpar->Status();
 
+    std::cout << "residuo: " << residuo(cos1, hist) << '\n';
+
+
     std::ofstream ofs("Fit.md");
-    if(!ofs.is_open()){
+    if (!ofs.is_open()) {
       std::cout << "Errore apertura file\n";
       return;
     }
@@ -250,11 +254,7 @@ class macro {
     ofs << "|:------:|:------|:------:|:------:|\n";
     for (int i = 0; i < npar_free; ++i) {
       const char* pname = cos->GetParName(i) ? cos->GetParName(i) : "";
-      ofs << "| " << i 
-          << " | " << pname 
-          << " | " << cos->GetParameter(i) 
-          << " | " << cos->GetParError(i) 
-          << " |\n";
+      ofs << "| " << i << " | " << pname << " | " << cos->GetParameter(i) << " | " << cos->GetParError(i) << " |\n";
     }
 
     ofs << "\n---\n\n";
@@ -271,31 +271,38 @@ class macro {
     ofs << "|:------:|:------|:------:|:------:|\n";
     for (int i = 0; i < npar_fix; ++i) {
       const char* pname = cos1->GetParName(i) ? cos1->GetParName(i) : "";
-      ofs << "| " << i 
-          << " | " << pname 
-          << " | " << cos1->GetParameter(i) 
-          << " | " << cos1->GetParError(i) 
-          << " |\n";
+      ofs << "| " << i << " | " << pname << " | " << cos1->GetParameter(i) << " | " << cos1->GetParError(i) << " |\n";
     }
 
     ofs.close();
   }
 
+  double residuo(TF1* cos, TH1F* hist, int b = 50) {
+    double diff;
+    for (int i = 0; i < b; ++i) {
+      double xlow        = hist->GetBinLowEdge(i + 1);
+      double xup         = hist->GetBinLowEdge(i + 2);
+      double cosIntegral = cos->Integral(xlow, xup);
+      double mean        = cosIntegral / (xup - xlow);
 
-    void draw() {
-      TCanvas* c1 = new TCanvas("c1", "Funzione coseno", 800, 600);
-      cos_function()->SetTitle("Funzione");
-      cos_function()->Draw();
-      c1->SaveAs("grafico.png");
-
-      TCanvas* c2 = new TCanvas("c2", "Estrazione punti", 800, 600);
-      random_generation_graph(10000)->Draw("AP");
-      c2->SaveAs("punti.png");
-
-      TCanvas* c3 = new TCanvas("c3", "Istogramma", 800, 600);
-      random_generation_hist(10000, 50)->Draw();
-      // cos_function()->Draw();
-      c3->SaveAs("istogramma.png");
+      diff += std::pow(mean - hist->GetBinContent(i + 1), 2);
     }
-};
+    return std::sqrt(diff);
+  }
 
+  void draw() {
+    TCanvas* c1 = new TCanvas("c1", "Funzione coseno", 800, 600);
+    cos_function()->SetTitle("Funzione");
+    cos_function()->Draw();
+    c1->SaveAs("grafico.png");
+
+    TCanvas* c2 = new TCanvas("c2", "Estrazione punti", 800, 600);
+    random_generation_graph(10000)->Draw("AP");
+    c2->SaveAs("punti.png");
+
+    TCanvas* c3 = new TCanvas("c3", "Istogramma", 800, 600);
+    random_generation_hist(10000, 50)->Draw();
+    // cos_function()->Draw();
+    c3->SaveAs("istogramma.png");
+  }
+};
