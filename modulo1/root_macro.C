@@ -182,8 +182,7 @@ class macro {
       std::cout << "INTEGRALE: " << cosScaled_g->Integral(0., 0.6) << '\n';
       hist_list.push_back(random_generation_hist(n_eventi, bins, cosScaled_g));
     }
-  std::cout << "INTEGRALE_histo: " << hist_list[1]->Integral(1, 50) << '\n';
-
+    std::cout << "INTEGRALE_histo: " << hist_list[1]->Integral(1, 50) << '\n';
 
     std::vector<double> media(bins, 0.0);
     std::vector<double> sigma(bins, 0.0);
@@ -273,11 +272,15 @@ class macro {
     cos1->FixParameter(2, b_);
     auto fixpar = hist->Fit(cos1, "RSQ");
 
+    TCanvas* c9 = new TCanvas("cosparfix", "cosus", 800, 600);
+    cos1->Draw();
+    hist->Draw("same");
+    c9->SaveAs("Fix_fit.png");
+
     int statusfree = freepar->Status();
     int statusfix  = fixpar->Status();
 
-    std::cout<<"residuo: "<< residuo(cos1, hist) << '\n';
-
+    std::cout << "residuo: " << residuo(cos1, hist) << '\n';
 
     std::ofstream ofs("Fit.md");
     if (!ofs.is_open()) {
