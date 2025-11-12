@@ -38,6 +38,8 @@ class double_slit {
     TF1* f     = new TF1("Funzione da simulare", "[0] + [1] * ((sin([2]*[3]*x))/([2]*[3]*x)) * (cos([2]*[4]*x))^2");
     TH1F* hist = new TH1F("hist", "Istogramma delle occorrenze", 400, -0.05f, 0.05f);
 
+    f->SetParameters(30, 150, 4, 10, 157/4);  //TOP: (30, 150, 4, 10, 157 / 4) (0, 1, 2, 3, 4)
+    std::cout << f->GetParameter(1);
     std::ifstream inputFile("data_double_slit.txt");
     double value;
 
@@ -51,11 +53,11 @@ class double_slit {
       return;
     }
 
-    //hist->Fit(f);
+    hist->Fit(f);
 
     TCanvas* DS = new TCanvas("DS", "Hiso_DB_Slit", 800, 600);
     hist->Draw();
-    //f->Draw("same");
+    f->Draw("same");
     DS->SaveAs("Double_slit.png");
   }
 };
