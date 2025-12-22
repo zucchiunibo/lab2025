@@ -19,6 +19,7 @@
 \usepackage{fontspec}
 \usepackage{setspace}
 \usepackage{caption}
+\usepackage{tocloft}
 
 \setmainfont{calibri.ttf}[Path=./fonts/,Extension=.ttf,BoldFont=calibri_bold.ttf,ItalicFont=calibri_italic.ttf]
 
@@ -32,6 +33,11 @@
     justification=raggedright,
     singlelinecheck=true
 }
+
+% spazio prima di ogni \section in TOC (esempi: 0pt, 0.2ex, 0.5ex)
+\setlength{\cftbeforesecskip}{0.2ex}
+\setlength{\cftbeforesubsecskip}{0.2ex}
+\setlength{\cftparskip}{0pt} % evita spazi extra tra le voci
 
 \begin{document}
 
@@ -141,9 +147,11 @@ Le resistenze da $100 \; \Omega$ non permettevano una misurazione accurata del r
 
 Dopo aver eseguito le misurazione di ogni configurazione di resistori, è stato inoltre stimato il valore della \textbf{sensibilità del ponte}, cioè della derivata della tensione $V_w$ in funzione della resistenza $R_x$. Intorno al punto di bilanciamento, essa si ottiene con la seguente formula:
 
-\[
-S=\frac{V_s}{4R_x}
-\]
+\begin{equation}
+    S=\frac{V_s}{4R_x}
+    \label{eq:sensibilità}
+\end{equation}
+
 
 \begin{figure}[H]
     \centering
@@ -153,7 +161,7 @@ S=\frac{V_s}{4R_x}
 \end{figure}
 
 \section{Risultati e discussione}
-\subsection{DMM}
+\subsection{Metodo DMM}
 
 \begin{table}[h]
 \centering
@@ -171,29 +179,35 @@ $R_1 / R_2$ & 14.896 & 0.04 \\ \hline
 $R_{min}$ & 0.426 & 0.03 \\ \hline
 $R_{max}$ & 994.0 & 1.4 \\ \hline
 \end{tabular}
-\caption{\textit{Tabella dei valori delle resistenze mirurati mediante multimetro digitale della scheda Elvis con rispettive incertezze. Nelle ultime 2 righe si riporta il valore minimo e massimo di resistenza del potenziometro.}}
-\label{tab:resistenze}
+\caption{Tabella dei valori delle resistenze mirurati mediante multimetro digitale della scheda Elvis con rispettive incertezze. Nelle ultime 2 righe si riporta il valore minimo e massimo di resistenza del potenziometro.}
+\label{tab:resistenzeDDM}
 \end{table}
 
-La misura delle resistenze, effettuata con il multimetro della scheda Elvis, ha prodotto i risultati sopra riportati (Tabella 1). Le incertezze, di natura strumentale, sono state stimate a partire dalle specifiche della scheda stessa. L'incertezza sulla resistenza è stata misurata come $\pm (\text{ppm of reading} + \text{ppm of of range})$ dove:
+La misura delle resistenze, effettuata con il multimetro della scheda Elvis, ha prodotto i risultati sopra riportati (tabella \ref{tab:resistenzeDDM}). Le incertezze, di \textbf{natura strumentale}, sono state stimate a partire dalle specifiche della scheda stessa. L'incertezza sulla resistenza è stata misurata come $\pm (\text{ppm of reading} + \text{ppm of range})$ dove:
 \begin{itemize}
-    \item reading: valore della resistenza misurato dal multimetro digitale.
-    \item range: scegliere il più opportuno tra i valori di resistenza proposti nella tabella. Il range scelto deve essere maggiore del valore della resistenza incognita.
+    \item \textbf{reading}: valore della resistenza misurato dal multimetro digitale.
+    \item \textbf{range}: intervallo di misurazione del multimetro della scheda Elvis. Il range scelto deve essere maggiore del valore della resistenza incognita e circa nello stesso ordine di grandezza.
 \end{itemize}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\linewidth]{figures/deltaR.jpg}
-    \caption{\textit{Riga della tabella per il calcolo delle incertezze della resisteza presa dal manuale della scheda Elvis}}
-    \label{fig:placeholder}
+    \includegraphics[width=0.9\linewidth]{figures/deltaR.jpg}
+    \caption{Riga della tabella per il calcolo delle incertezze della resisteza presa dal manuale della scheda Elvis}
+    \label{fig:tabellaElvis}
 \end{figure}
 
-Supponiamo di voler calcolare l'incertezza associata alla misura della resistenza da $15 \Omega$. In questo caso scegliamo il range di $100 \Omega$, ne consegue che $$\Delta\Omega = (450\cdot\frac{\text{reading}}{10^6} +310\cdot\frac{\text{range}}{10^6})$$.
+I valori delle parti per milione sono indicate nel manuale della scheda Elvis (figura \ref{fig:tabellaElvis}). 
+
+Per esempio, consideriamo la resistenza da $15 \Omega$. In questo caso, scegliamo il range di $100 \Omega$. Di conseguenza, 
+\begin{equation*}
+    \Delta\Omega = \left(450\cdot\frac{\text{reading}}{10^6} +310\cdot\frac{\text{range}}{10^6}\right)
+\end{equation*}
 
 Ci siamo inoltre assicurati che le incertezze così calcolate sulla serie e sul parallelo fossero comparabili con quelle ricavate mediante propagazione lineare degli errori.
 
-I valori misurati sono dell'ordine di grandezza corretto ma non risultano compatibili con quelli attesi. La causa di ciò è da ricercare proprio nel valore nominale delle resistenze; quest'ultimo infatti non è altro che un riferimento al quale, il costruttore, associa una tolleranza (nel nostro caso del 5\%).
-Tenendo conto di ciò i dati raccolti risultano coerenti e compatibili con quanto atteso.
+I valori misurati sono dell'ordine di grandezza corretto ma a primo impatto non risultano compatibili con quelli attesi. 
+La causa di ciò è da ricercare proprio nel valore nominale delle resistenze; quest'ultimo infatti è sempre accompagnato da una tolleranza (nel nostro caso del 5\%).
+Tenendo conto di ciò questo valori, i dati raccolti risultano \textbf{coerenti e compatibili} con quanto atteso.
 
 
 \subsection{Legge di Ohm}
@@ -214,27 +228,31 @@ $R_3$ & 15118.2 & 168.34 & 15127.59 & 86.88 \\ \hline
 $R_1 + R_2$ & 694.646 & 0.362106 & 694.33 & 0.17 \\ \hline
 $R_1 / R_2$ & 14.7315 & 0.0297885 & 14.73 & 0.01 \\ \hline
 \end{tabularx}
-\caption{Tabella dei valori delle resistenza con le rispettive incertezze. Le prime due colonne riportano l'output del programma di analisi dati scritto in LabVIEW utilizzato durante la presa dati. Le ultime due colonne riportano le stesse grandezze ma ricavate mediante fit lineare effettuato in python.}
-\label{tab:resistenze}
+\caption{Tabella dei valori delle resistenza con le rispettive incertezze. Le prime due colonne riportano l'output del programma di analisi dati scritto in LabVIEW utilizzato durante la presa dati; le ultime due riportano le stesse grandezze ma ricavate mediante fit lineare effettuato in Python.}
+\label{tab:resistenzeOhm}
 \end{table}
 
-La misura delle resistenze mediante applicazione della legge di Ohm ha prodotto i risultati sopra riportati (Tabella 2).
-Il programma di acquisizione dati in LabVIEW ha permesso di calcolare la resistenza mediante regressione lineare dei punti nel piano tensione(V) - corrente(I). La resistenza corrisponde infatti al reciproco del coefficiente angolare della retta del fit.
-Abbiamo rianalizzato i dati eseguendo un fit in python e ne abbiamo riportato i risultati nelle ultime due colonne (Tabella 2).
+La misura delle resistenze mediante applicazione della legge di Ohm ha prodotto i risultati sopra riportati (tabella \ref{tab:resistenzeOhm}).
+Il programma di acquisizione dati in LabVIEW ha permesso di calcolare la resistenza mediante \textbf{regressione lineare} dei punti nel piano tensione-corrente. La resistenza corrisponde infatti al reciproco del coefficiente angolare della retta del fit (equazione \ref{eq:leggeOhm}).
+Successivamente, abbiamo rianalizzato i dati eseguendo un fit in Python e ne abbiamo riportato i risultati nelle ultime due colonne della tabella.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\linewidth]{figures/Grafico_Ohm_Incertezza.png}
+    \includegraphics[width=0.8\linewidth]{figures/Grafico_Ohm_Incertezza.png}
     \caption{Grafico Tensione-Corrente e fit lineare ricavato mediante numpy.polyfit.}
-    \label{fig:placeholder}
+    \label{fig:graficoIV}
 \end{figure}
 
-Durante la presa dati, si è osservato che, per la resistenza da $15\Omega$, per via del setup sperimentale, non era possibile effettuare la presa dati per tensioni superiori a $0.2 V$. Pertanto, la rilevazione dei dati è stata fatta su un intervallo simmetrico rispetto allo $0$ di ampiezza $0.30 V$, a differenza delle altre misurazioni effettuate su un intervallo di $(0-5)V$.
+Durante la presa dati, si è osservato che, per la resistenza da $15\; \Omega$ - per via del setup sperimentale - non era possibile effettuare la presa dati per tensioni superiori a $0.2 \;\text{V}$. Pertanto, la rilevazione dei dati è stata fatta su un intervallo simmetrico rispetto allo $0$ di ampiezza $0.30 \; \text{V}$, a differenza delle altre misurazioni effettuate su un intervallo di $(0-5)\;\text{V}$.
 
-La misura dell'incertezza su R ricavata mediante fit è calcolata in 2 passaggi. In primo luogo il fit permette di ricavare l'incertezza sul coefficiente angolare a partire dalla matrice di covarianza del fit, dopodichè, sapendo che la resistenza è il reciproco del coefficiente angolare(m) è possibile propagare linearmente l'errore su m per ottenere quello sulla resistenza. $$\sigma_R = \left| \frac{dR}{dm} \right| \sigma_m = \frac{1}{m^2} \sigma_m = \frac{\sigma_m}{m^2}$$
+La misura dell'incertezza su R ricavata mediante fit è stata calcolata in 2 passaggi. In primo luogo, il fit permette di ricavare l'incertezza sul coefficiente angolare a partire dalla matrice di covarianza del fit. Dopodichè, sapendo che la resistenza è il reciproco del coefficiente angolare $m$, è stato possibile propagare linearmente l'errore su $m$ per ottenere quello sulla resistenza:
 
-I valori delle incertezze sulle resistenze, misurate con applicazione della legge di Ohm, sono di natura statistica (a differenza di quelle strumentali del DMM). Come si può notare, la compatibilità delle misure di resistenza rispetto ai valori attesi è migliorata e si ottiene così la compatibilità per le resistenze da $15 \Omega$ e $15\text{k}\Omega$. Per le altre configurazioni, associamo la non compatibilità alla tolleranza del valore nominale delle resistenze. Possiamo invece notare che c'è compatibilità tra i dati elaborati dal programma LabVIEW e quelli analizzati mediante fit.
+\begin{equation*}
+    \sigma_R = \left| \frac{\text{d}R}{\text{d}m} \right| \sigma_m = \frac{1}{m^2} \sigma_m = \frac{\sigma_m}{m^2}
+\end{equation*}
 
+I valori delle incertezze sulle resistenze, misurate con applicazione della legge di Ohm, sono di \textbf{natura statistica }(a differenza di quelle strumentali del DMM). 
+Conseguenza di ciò è la \textbf{compatibilità maggiore} delle misure di resistenza con il valore atteso: mentre nel metodo DMM era necessario tener conto della tolleranza di fabbricazione per confermare la compatibilità delle misure, con questo metodo le misure sono compatibili direttamente con i valori attesi.
 
 \subsection{Ponte di Wheatstone}
 
@@ -257,12 +275,11 @@ $R_1 // R_2$ & 15.5859 & 0.0030 & 0.03184 & 0.00005 & 8.02005e-02\\ \hline
 $R_1 (V_w = \pm8V, V_0 = \pm2V)$ & 16.3199 & 0.0030 & 0.04246 & 0.00005 & 7.65937e-02\\ \hline
 \end{tabular}
 \caption{Tabella dei valori delle resistenza misurate mediante ponte di Wheatstone.}
-\label{tab:resistenze}
+\label{tab:resistenzeWheatstone}
 \end{table}
 
-La misura delle resistenze con il ponte di Wheatstone ha prodotto i dati riportati in tabella (Tabella 3). La resistenza $(R_x)$ e il voltaggio del ponte $(V_w)$, con le rispettive incertezze, sono stati ricavati a partire da 100 valori (per entrambe le grandezze) di output del programma. L'analisi dei dati è stata effettuata assumendo una distribuzione normale dei dati. Ad $R_x$ e $V_w$ è stata associata la media della distribuzione; alle incertezze la deviazione standard della media. Nell'ultima colonna è riportata la sensibilità del ponte calcolata come $\frac{Vs}{4R_x}$ dove $Vs$ ricordiamo essere la tensione di alimentazione a 5V.
-Il valore e l'incertezza di $R_3$ sono dati dai risultati dell'analisi statistica moltiplicati per il fattore moltiplicativo.
-
+La misura delle resistenze con il ponte di Wheatstone ha prodotto i dati riportati in tabella \ref{tab:resistenzeWheatstone}. La resistenza $(R_x)$ e il voltaggio del ponte $(V_w)$, con le rispettive incertezze, sono stati ricavati a partire da 100 valori (per entrambe le grandezze) di output del programma. L'analisi dei dati è stata effettuata assumendo una distribuzione normale. Ad $R_x$ e $V_w$ è stata associata la media della distribuzione, mentre alle incertezze la deviazione standard della media. 
+Nelle figure \ref{fig:histoR} e \ref{fig:histoV} sono riportati i grafici associati al fit gaussiano per la resistenza e la tensione durante la misurazione del resistore da $15\;\Omega$.
 
 \begin{figure}[H]
     \centering
@@ -270,28 +287,30 @@ Il valore e l'incertezza di $R_3$ sono dati dai risultati dell'analisi statistic
         \centering
         \includegraphics[width=\linewidth]{figures/istogramma_R_fit_gaussiano.pdf}
         \caption{Istogramma normalizzato e fit gaussiano delle misure di resistenza. La $\sigma$ riportata è campionaria.}
-        \label{fig:placeholder1}
+        \label{fig:histoR}
     \end{minipage}\hfill
     \begin{minipage}{0.45\textwidth}
         \centering
         \includegraphics[width=\linewidth]{figures/istogramma_dV_fit_gaussiano.pdf}
         \caption{Istogramma normalizzato e fit gaussiano delle misure di $V_w$. La $\sigma$ riportata è campionaria.}
-        \label{fig:placeholder2}
+        \label{fig:histoV}
     \end{minipage}
 \end{figure}
 
-Nelle immagini sopra (Figure 2 e 3) sono riportati i grafici associati al fit gaussiano per di resistenza e tensione della resistenza da $15\Omega$.
+Nell'ultima colonna della tabella \ref{tab:resistenzeWheatstone} è riportata la \textbf{sensibilità} del ponte, calcolata come nell'equazione \ref{eq:sensibilità}, dove $V_s$ è la tensione di alimentazione (impostata a $5 \;\text{V}$).
+Invece, il valore e l'incertezza di $R_3$ sono dati dai risultati dell'analisi statistica moltiplicati per il fattore moltiplicativo.
 
-La sensibilità del ponte diminuisce con l'aumentare della resistenza (Tabella 3), dunque, l'incertezza relativa tende a diminuire all’aumentare del valore misurato perché la misura assoluta $\Delta R$ rimane approssimativamente costante, mentre il denominatore R cresce.
+Dalla stessa tabella, si può notare che la sensibilità del ponte diminuisce con l'aumentare della resistenza; dunque, l'incertezza relativa tende a diminuire all’aumentare del valore misurato. Cià avviene perché la misura assoluta $\Delta R$ rimane approssimativamente costante, mentre il denominatore dell'equazione \ref{eq:wheatstone} R cresce.
+
 Dall'ultima riga della tabella possiamo osservare che, variando la portata di $V_w$ e $V_0$, le incertezze rimangono uguali. Ciò probabilmente accade perchè la dispersione dei dati è dominata dal rumore elettronico di fondo e dalle fluttuazioni del ponte.
 
-Le misure di resistenza ricavate mediante il ponte di Wheatstone (Tabella 3) risultano compatibili, entro le incertezze sperimentali e la tolleranza dei valori di riferimento, con i valori nominali attesi.
+Ricapitolando, le misure di resistenza ricavate mediante il ponte di Wheatstone risultano \textbf{compatibili}, entro le incertezze sperimentali e la tolleranza dei valori di riferimento, con i valori nominali attesi.
 
 \section{Conclusione}
-L’analisi dei dati raccolti con le tre metodologie ha permesso di ottenere misure delle resistenze prese in esame compatibili con la misura di fabbricazione riportata sulle stesse, a meno dell’intervallo di tolleranza del valore della resistenza del $5\%$.
+L’analisi dei dati raccolti con le tre metodologie ha permesso di ottenere misure delle resistenze compatibili con la misura di fabbricazione riportata sulle stesse in tutti e tre i casi. Mentre nei metodi basatosi sul DMM e sul ponte di Wheatstone è stato necessario prendere in esame la tolleranza di frabbricazione delle resistenze, il metodo statistico construito sulla legge di Ohm fornisce misure compatibili ai valori attesi puri.
 
 
-\newpage
+\vspace{1cm}
 \tableofcontents
 \newpage
 
