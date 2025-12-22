@@ -49,9 +49,9 @@
     Scopo dell’esperimento è stata la misurazione della resistenza di tre resistori, 
     nel nostro caso da $15 \; \Omega$, $670 \; \Omega$ e $15 \; \text{k}\Omega$, e delle 
     combinazioni di alcune di loro, in particolare le prime due in serie e in parallelo. 
-    La misura è stata svolta in tre diverse metodologie diverse: attraverso l'utilizzo del 
-    \textbf{Multimetro Digitale} (\textit{Digital MultiMeter}, DMM) della scheda Elvis II, usufruendo della 
-    \textbf{legge di Ohm} sul grafico corrente-tensione, e infine mediante l’utilizzo di un \textbf{ponte di 
+    La misura è stata svolta in tre diverse metodologie diverse: una basantesi sull'utilizzo del 
+    \textbf{Multimetro Digitale} (\textit{Digital MultiMeter}, DMM) della scheda Elvis II, una sulla 
+    \textbf{legge di Ohm} applicata al grafico corrente-tensione, e infine una sull’utilizzo di un \textbf{ponte di 
     Wheatstone} con resistenze appositamente bilanciate. I risultati di tutte e tre le misurazioni 
     sono risultati \textbf{compatibili} con il valore di fabbricazione delle resistenze utilizzate, tenendo 
     conto dell’intervallo di tolleranza dei valori.
@@ -77,23 +77,22 @@ separate e il valore delle prime due in serie (corrispondente a $675 \; \Omega$)
 Per calcolare il valore delle resistenze sono stati seguiti tre metodi diversi:
 
 \begin{enumerate}
-    \item \textbf{Utilizzo del Multimetro Digitale (DMM) della scheda Elvis II}: per far ciò è stato necessario collegare i cavi Banana A e Banana B agli appositi terminali e successivamente collegarvi la resistenza il cui valore è stato possibile leggere dal pannello DMM della scheda Elvis sul computer;
+    \item \textbf{Utilizzo del multimetro digitale (DMM) della scheda Elvis II}: per far ciò è stato necessario collegare i cavi Banana A e Banana B agli appositi terminali e successivamente collegarvi la resistenza il cui valore è stato possibile leggere dal pannello DMM della scheda Elvis sul computer;
     \item \textbf{Applicazione della legge di Ohm}: il metodo consiste nell’applicazione di una tensione variabile ad ognuna delle resistenze (o configurazioni di resistenze), misurando contemporaneamente con un amperometro la corrente passante nel circuito. 
-    I dati acquisiti sono stati visualizzati in un programma scritto in LabVIEW da cui è stato possibile osservare il grafico corrente-tensione. Eseguendo un fit sempre con lo stesso programma si può ricavare la pendenza della retta, quindi la resistenza. Inoltre, i dati raccolti dal programma sono stati salvati e successivamente analizzati con un programma scritto in Python.
-    \item \textbf{Utilizzo del Ponte di Wheatstone}: esso è un circuito composto da una resistenza variabile che permette di stimare il valore di una resistenza fissa.
+    \item \textbf{Utilizzo del ponte di Wheatstone}: un circuito composto da una resistenza variabile che permette di stimare il valore di una resistenza fissa.
 \end{enumerate}
 
 
 \section{Apparato sperimentale}
-L'apparato sperimentale consisteva in:
+L'apparato sperimentale (figure \ref{fig:setup} e \ref{fig:wheatstoneCircuito}) consisteva in:
 \begin{itemize}
-    \item Scheda NI Elvis II, dotata di breadbord per la costruzione di circuiti e multimetro digitale (DMM) integrato;
-        \item Laptop del laboratorio con i programmi necessari per l'esperimento, scritti in LabVIEW;
+    \item \textbf{Scheda NI Elvis II}, dotata di breadboard per la costruzione di circuiti e multimetro digitale (DMM) integrato;
+        \item \textbf{Laptop del laboratorio} con i programmi necessari per l'esperimento, scritti in LabVIEW;
         \item Componenti del circuito, più precisamente:
         \begin{itemize}
-            \item Cinque resistenze: una da $15 \; \Omega$, una da $670 \; \Omega$, una da $15 \; \text{k}\Omega$ e due da $100 \; \Omega$;
-            \item Un potenziometro;
-            \item Svariati cavetti per la realizzazione del circuito.
+            \item \textbf{Cinque resistenze}: una da $15 \; \Omega$, una da $670 \; \Omega$, una da $15 \; \text{k}\Omega$ e due da $100 \; \Omega$;
+            \item Un \textbf{potenziometro};
+            \item Svariati \textbf{cavetti} per la realizzazione del circuito.
         \end{itemize}
 \end{itemize}
 
@@ -105,21 +104,26 @@ Durante lo svolgimento del laboratorio sono stati costruiti tre circuiti princip
         \centering
         \includegraphics[width=\linewidth]{figures/setup.jpg}
         \caption{Setup sperimentale. Da sinistra a destra: scheda Elvis II montata con il secondo circuito (per la misura attraverso la legge di Ohm) e laptop fornito del programma in LabVIEW.}
-        \label{fig:circuitoDMM}
+        \label{fig:setup}
     \end{minipage}\hfill
     \begin{minipage}{0.45\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/davide.jpg}
-        \caption{Davide "Dadolf" Rizzi.}
-        \label{fig:circuitoOhm}
+        \includegraphics[width=\linewidth]{figures/wheatstoneCircuito.jpg}
+        \caption{Circuito del ponte di Wheatstone realizzato sulla breadboard della scheda Elvis.}
+        \label{fig:wheatstoneCircuito}
     \end{minipage}
 \end{figure}
 
 \section{Svolgimento delle misure}
 \subsection{Metodo DMM}
-wheatstone
+Il primo metodo, basatosi sul \textbf{multimetro digitale} della scheda Elvis, è il più elementare fra i tre. Infatti, abbiamo costruito un circuito che collegasse la resistenza da misurare con le entrate $\text{V}\Omega$ e COM della scheda. Successivamente, abbiamo aperto l'applicazione LabVIEW "Digital Multimeter" per visualizzare i dati misurati.
 
 \subsection{Metodo con legge di Ohm}
+Come prima cosa abbiamo costruito un circuito che collegasse la resistenza all'amperometro digitale della Elvis e all'Analog Output. Così facendo,
+è stato possibile visualizzare i dati acquisiti e il \textbf{grafico corrente-tensione} in un programma scritto in LabVIEW. 
+
+Eseguendo un fit sempre con lo stesso programma abbiamo ricavato la pendenza della retta, ovvero la resistenza. In aggiunta, abbiamo salvato separatamente i dati raccolti dal programma per poi analizzarli con un programma scritto in Python.
+
 
 \subsection{Ponte di Wheatstone}
 Come si può notare dalla figura \ref{fig:wheatstoneSchema}, il circuito del ponte di Wheatstone consiste in due coppie in parallelo di resistenze in serie. Il potenziometro $V_w$ restituisce il valore della tensione fra i nodi $\text{B}$ e $\text{C}$. Se la tensione $V_w$ è pari a $0 \; \text{V}$ 
@@ -131,7 +135,7 @@ allora si ha che:
 \end{equation}
 Dove $R_x$ è la resistenza che si vuole misurare.
 
-Mentre $R_1$ e $R_2$ sono resistenze fisse da $100 \; \Omega$, $R_3$ è un \textbf{potenziometro} che ci ha permesso di portare la differenza di potenziale $V_w$ prossima allo zero. Inoltre, $V_p$ e la corrente $i$ - misurata dall'amperometro - hanno permesso di misurare la resistenza del potenziometro contemporaneamente alla visualizzazione del grafico $(V_w,t)$ nel programma LabVIEW.
+Mentre $R_1$ e $R_2$ sono resistenze fisse da $100 \; \Omega$, $R_3$ è un \textbf{potenziometro} che ci ha permesso di portare la differenza di potenziale $V_w$ prossima allo zero. Inoltre, $V_p$ e la corrente $i$ - misurata dall'amperometro - hanno permesso di misurare la resistenza del potenziometro contemporaneamente alla visualizzazione del grafico $(V_w,t)$ nel programma LabVIEW. Il circuito realizzato è in figura \ref{fig:wheatstoneCircuito}.
 
 Le resistenze da $100 \; \Omega$ non permettevano una misurazione accurata del resistore da $15 \; \text{k}\Omega$, quindi abbiamo variato il rapporto $R_1 / R_2$ per aumentare la portata del ponte di Wheatstone.
 

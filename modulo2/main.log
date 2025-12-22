@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.18.1 (MiKTeX 24.4) (format=lualatex 2025.10.3)  22 DEC 2025 21:43
+This is LuaHBTeX, Version 1.18.1 (MiKTeX 24.4) (format=lualatex 2025.10.3)  22 DEC 2025 22:12
  restricted system commands enabled.
  file:line:error style messages enabled.
 **"c:/Users/simon/OneDrive/Studio/Università/Fisica/Anno II/Laboratorio di Ele
@@ -1725,64 +1725,65 @@ LaTeX Font Warning: Font shape `TS1/calibri.ttf(0)/m/n' undefined
 [1
 
 {C:/Users/simon/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
-<figures/setup.jpg, id=64, 3738.96875pt x 2784.4025pt>
+<figures/setup.jpg, id=68, 3738.96875pt x 2784.4025pt>
 File: figures/setup.jpg Graphic file (type jpg)
 <use figures/setup.jpg>
-Package luatex.def Info: figures/setup.jpg  used on input line 106.
+Package luatex.def Info: figures/setup.jpg  used on input line 105.
 (luatex.def)             Requested size: 217.66211pt x 162.08601pt.
 
 
 LaTeX Font Warning: Font shape `TU/calibri.ttf(0)/b/it' undefined
-(Font)              using `TU/calibri.ttf(0)/b/n' instead on input line 107.
+(Font)              using `TU/calibri.ttf(0)/b/n' instead on input line 106.
 
-<figures/davide.jpg, id=65, 4095.3pt x 3071.475pt>
-File: figures/davide.jpg Graphic file (type jpg)
-<use figures/davide.jpg>
-Package luatex.def Info: figures/davide.jpg  used on input line 112.
-(luatex.def)             Requested size: 217.66211pt x 163.23732pt.
+<figures/wheatstoneCircuito.jpg, id=69, 3888.5275pt x 2916.8975pt>
+File: figures/wheatstoneCircuito.jpg Graphic file (type jpg)
+<use figures/wheatstoneCircuito.jpg>
+Package luatex.def Info: figures/wheatstoneCircuito.jpg  used on input line 111
+.
+(luatex.def)             Requested size: 217.66211pt x 163.25613pt.
 
 
-[2<./figures/setup.jpg><./figures/davide.jpg>]
-<figures/wheatstoneSchema.jpg, id=78, 930.47626pt x 631.35875pt>
+[2<./figures/setup.jpg><./figures/wheatstoneCircuito.jpg>]
+<figures/wheatstoneSchema.jpg, id=82, 930.47626pt x 631.35875pt>
 File: figures/wheatstoneSchema.jpg Graphic file (type jpg)
 <use figures/wheatstoneSchema.jpg>
-Package luatex.def Info: figures/wheatstoneSchema.jpg  used on input line 146.
+Package luatex.def Info: figures/wheatstoneSchema.jpg  used on input line 150.
 (luatex.def)             Requested size: 193.47578pt x 131.27905pt.
-<figures/deltaR.jpg, id=79, 345.144pt x 38.544pt>
+<figures/deltaR.jpg, id=83, 345.144pt x 38.544pt>
 File: figures/deltaR.jpg Graphic file (type jpg)
 <use figures/deltaR.jpg>
-Package luatex.def Info: figures/deltaR.jpg  used on input line 182.
+Package luatex.def Info: figures/deltaR.jpg  used on input line 186.
 (luatex.def)             Requested size: 483.69687pt x 54.01944pt.
 
 
 [3<./figures/wheatstoneSchema.jpg><./figures/deltaR.jpg>]
-<figures/Grafico_Ohm_Incertezza.png, id=86, 650.43pt x 433.62pt>
+<figures/Grafico_Ohm_Incertezza.png, id=91, 650.43pt x 433.62pt>
 File: figures/Grafico_Ohm_Incertezza.png Graphic file (type png)
 <use figures/Grafico_Ohm_Incertezza.png>
 Package luatex.def Info: figures/Grafico_Ohm_Incertezza.png  used on input line
- 223.
+ 227.
 (luatex.def)             Requested size: 483.69687pt x 322.47498pt.
 
 
-[4<./figures/Grafico_Ohm_Incertezza.png>]
-<figures/istogramma_R_fit_gaussiano.pdf, id=94, 462.528pt x 346.896pt>
+[4]
+
+[5<./figures/Grafico_Ohm_Incertezza.png>]
+<figures/istogramma_R_fit_gaussiano.pdf, id=104, 462.528pt x 346.896pt>
 File: figures/istogramma_R_fit_gaussiano.pdf Graphic file (type pdf)
 <use figures/istogramma_R_fit_gaussiano.pdf>
 Package luatex.def Info: figures/istogramma_R_fit_gaussiano.pdf  used on input 
-line 267.
+line 271.
 (luatex.def)             Requested size: 217.66211pt x 163.24757pt.
-<figures/istogramma_dV_fit_gaussiano.pdf, id=95, 462.528pt x 346.896pt>
+<figures/istogramma_dV_fit_gaussiano.pdf, id=105, 462.528pt x 346.896pt>
 File: figures/istogramma_dV_fit_gaussiano.pdf Graphic file (type pdf)
 <use figures/istogramma_dV_fit_gaussiano.pdf>
 Package luatex.def Info: figures/istogramma_dV_fit_gaussiano.pdf  used on input
- line 273.
+ line 277.
 (luatex.def)             Requested size: 217.66211pt x 163.24757pt.
 
 
-[5<./figures/istogramma_R_fit_gaussiano.pdf><./figures/istogramma_dV_fit_gaussia
-no.pdf>]
-
-[6] (./main.toc)
+[6<./figures/istogramma_R_fit_gaussiano.pdf><./figures/istogramma_dV_fit_gaussia
+no.pdf>] (./main.toc)
 \tf@toc=\write6
 
 \openout6 = main.toc
@@ -1809,12 +1810,12 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
 Here is how much of LuaTeX's memory you used:
  45933 strings out of 475664
- 125007,2373549 words of node,token memory allocated
+ 125003,2373549 words of node,token memory allocated
  691 words of node memory still in use:
    7 hlist, 2 vlist, 2 rule, 5 glue, 4 kern, 1 glyph, 28 attribute, 74 glue_spec
 , 16 attribute_list, 2 write nodes
-   avail lists: 1:5,2:798,3:235,4:67,5:1827,6:62,7:11862,8:32,9:593,10:24,11:170
-3
+   avail lists: 1:6,2:828,3:274,4:79,5:1685,6:70,7:11257,8:32,9:512,10:24,11:160
+6
  67692 multiletter control sequences out of 65536+600000
  89 fonts using 8343695 bytes
  84i,11n,92p,1298b,1646s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -1828,9 +1829,9 @@ e1/public/amsfonts/cm/cmmi8.pfb><C:/Users/simon/AppData/Local/Programs/MiKTeX/fo
 nts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/simon/AppData/Local/Programs/Mi
 KTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/simon/AppData/Local/Progr
 ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on main.pdf (7 pages, 5810406 bytes).
+Output written on main.pdf (7 pages, 4427699 bytes).
 
-PDF statistics: 278 PDF objects out of 1000 (max. 8388607)
+PDF statistics: 283 PDF objects out of 1000 (max. 8388607)
  32 named destinations out of 1000 (max. 131072)
  104 words of extra memory for PDF output out of 10000 (max. 100000000)
 
