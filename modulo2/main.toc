@@ -1,0 +1,13 @@
+\babel@toc {italian}{}\relax 
+\babel@toc {italian}{}\relax 
+\contentsline {section}{\numberline {1}Introduzione}{1}{section.1}%
+\contentsline {section}{\numberline {2}Apparato sperimentale}{1}{section.2}%
+\contentsline {section}{\numberline {3}Svolgimento delle misure}{2}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Metodo DMM}{2}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Metodo con legge di Ohm}{2}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Ponte di Wheatstone}{2}{subsection.3.3}%
+\contentsline {section}{\numberline {4}Risultati e discussione}{3}{section.4}%
+\contentsline {subsection}{\numberline {4.1}DMM}{3}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Legge di Ohm}{4}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Ponte di Wheatstone}{5}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Conclusione}{6}{section.5}%

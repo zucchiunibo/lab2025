@@ -39,12 +39,116 @@
 \begin{center}
     {\textbf{\Large Laboratorio di Elettromagnetismo e Ottica}}\\[0.5cm]
     {\textbf{\Large Prova 3: Misura di Resistenze e Ponte di Wheatstone}}\\[0.7cm]
-    {\large Emanuele Martelli \\ Davide Rizzi \\ David Santiago Caballero \\ Simone Zucchi}\\[0.7cm]
+    {\large Emanuele Martelli - 0001161940 \\ Davide Rizzi - 0001172170 \\ David Santiago Caballero - 1900140466 \\ Simone Zucchi - 0001170508}\\[0.7cm]
     {\large 10 dicembre 2025}
 \end{center}
 
+
+\renewcommand{\abstractname}{Abstract}
+\begin{abstract}
+    Scopo dell’esperimento è stata la misurazione della resistenza di tre resistori, 
+    nel nostro caso da $15 \; \Omega$, $670 \; \Omega$ e $15 \; \text{k}\Omega$, e delle 
+    combinazioni di alcune di loro, in particolare le prime due in serie e in parallelo. 
+    La misura è stata svolta in tre diverse metodologie diverse: attraverso l'utilizzo del 
+    \textbf{Multimetro Digitale} (\textit{Digital MultiMeter}, DMM) della scheda Elvis II, usufruendo della 
+    \textbf{legge di Ohm} sul grafico corrente-tensione, e infine mediante l’utilizzo di un \textbf{ponte di 
+    Wheatstone} con resistenze appositamente bilanciate. I risultati di tutte e tre le misurazioni 
+    sono risultati \textbf{compatibili} con il valore di fabbricazione delle resistenze utilizzate, tenendo 
+    conto dell’intervallo di tolleranza dei valori.
+\end{abstract}
+
+\section{Introduzione}
+La \textbf{resistenza} è una grandezza fisica - misurata in ohm ($\Omega$) - associata all'opposizione da parte di un corpo al passaggio di 
+corrente elettrica quando ad esso viene applicata una tensione. La \textbf{legge di Ohm} permette 
+di calcolare la resistenza di un corpo attraverso il rapporto fra la differenza di potenziale ai capi e la corrente generata:
+
+\begin{equation}
+    R = \frac{\Delta V}{i}
+    \label{eq:leggeOhm}
+\end{equation}
+
+Dove $R$ è la resistenza, $\Delta V$ la differenza di potenziale ai capi del corpo e $i$ la corrente.
+
+Nel nostro esperimento abbiamo usato tre diversi resistori con resistenza riportata dal costruttore 
+pari a $15 \; \Omega$, $670 \; \Omega$ e $15 \; \text{k}\Omega$. Questi valori di fabbricazione hanno 
+un intervallo di tolleranza del $5\%$. Le misurazioni prese riguardano i valori delle tre resistenze 
+separate e il valore delle prime due in serie (corrispondente a $675 \; \Omega$) e in parallelo (corrispondente a circa $14.67 \; \Omega$).
+
+Per calcolare il valore delle resistenze sono stati seguiti tre metodi diversi:
+
+\begin{enumerate}
+    \item \textbf{Utilizzo del Multimetro Digitale (DMM) della scheda Elvis II}: per far ciò è stato necessario collegare i cavi Banana A e Banana B agli appositi terminali e successivamente collegarvi la resistenza il cui valore è stato possibile leggere dal pannello DMM della scheda Elvis sul computer;
+    \item \textbf{Applicazione della legge di Ohm}: il metodo consiste nell’applicazione di una tensione variabile ad ognuna delle resistenze (o configurazioni di resistenze), misurando contemporaneamente con un amperometro la corrente passante nel circuito. 
+    I dati acquisiti sono stati visualizzati in un programma scritto in LabVIEW da cui è stato possibile osservare il grafico corrente-tensione. Eseguendo un fit sempre con lo stesso programma si può ricavare la pendenza della retta, quindi la resistenza. Inoltre, i dati raccolti dal programma sono stati salvati e successivamente analizzati con un programma scritto in Python.
+    \item \textbf{Utilizzo del Ponte di Wheatstone}: esso è un circuito composto da una resistenza variabile che permette di stimare il valore di una resistenza fissa.
+\end{enumerate}
+
+
+\section{Apparato sperimentale}
+L'apparato sperimentale consisteva in:
+\begin{itemize}
+    \item Scheda NI Elvis II, dotata di breadbord per la costruzione di circuiti e multimetro digitale (DMM) integrato;
+        \item Laptop del laboratorio con i programmi necessari per l'esperimento, scritti in LabVIEW;
+        \item Componenti del circuito, più precisamente:
+        \begin{itemize}
+            \item Cinque resistenze: una da $15 \; \Omega$, una da $670 \; \Omega$, una da $15 \; \text{k}\Omega$ e due da $100 \; \Omega$;
+            \item Un potenziometro;
+            \item Svariati cavetti per la realizzazione del circuito.
+        \end{itemize}
+\end{itemize}
+
+Durante lo svolgimento del laboratorio sono stati costruiti tre circuiti principali: uno per la misurazione delle resistenze attraverso il DMM della Elvis, uno per la misura attraverso la legge di Ohm, e infine uno per il ponte di Wheatstone.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/setup.jpg}
+        \caption{Setup sperimentale. Da sinistra a destra: scheda Elvis II montata con il secondo circuito (per la misura attraverso la legge di Ohm) e laptop fornito del programma in LabVIEW.}
+        \label{fig:circuitoDMM}
+    \end{minipage}\hfill
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/davide.jpg}
+        \caption{Davide "Dadolf" Rizzi.}
+        \label{fig:circuitoOhm}
+    \end{minipage}
+\end{figure}
+
+\section{Svolgimento delle misure}
+\subsection{Metodo DMM}
+wheatstone
+
+\subsection{Metodo con legge di Ohm}
+
+\subsection{Ponte di Wheatstone}
+Come si può notare dalla figura \ref{fig:wheatstoneSchema}, il circuito del ponte di Wheatstone consiste in due coppie in parallelo di resistenze in serie. Il potenziometro $V_w$ restituisce il valore della tensione fra i nodi $\text{B}$ e $\text{C}$. Se la tensione $V_w$ è pari a $0 \; \text{V}$ 
+allora si ha che:
+
+\begin{equation}
+    \frac{R_1}{R_2} = \frac{R_3}{R_x} \Rightarrow R_x = \frac{R_3 R_2}{R_1}
+    \label{eq:wheatstone}
+\end{equation}
+Dove $R_x$ è la resistenza che si vuole misurare.
+
+Mentre $R_1$ e $R_2$ sono resistenze fisse da $100 \; \Omega$, $R_3$ è un \textbf{potenziometro} che ci ha permesso di portare la differenza di potenziale $V_w$ prossima allo zero. Inoltre, $V_p$ e la corrente $i$ - misurata dall'amperometro - hanno permesso di misurare la resistenza del potenziometro contemporaneamente alla visualizzazione del grafico $(V_w,t)$ nel programma LabVIEW.
+
+Le resistenze da $100 \; \Omega$ non permettevano una misurazione accurata del resistore da $15 \; \text{k}\Omega$, quindi abbiamo variato il rapporto $R_1 / R_2$ per aumentare la portata del ponte di Wheatstone.
+
+Dopo aver eseguito le misurazione di ogni configurazione di resistori, è stato inoltre stimato il valore della \textbf{sensibilità del ponte}, cioè della derivata della tensione $V_w$ in funzione della resistenza $R_x$. Intorno al punto di bilanciamento, essa si ottiene con la seguente formula:
+
+\[
+S=\frac{V_s}{4R_x}
+\]
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\linewidth]{figures/wheatstoneSchema.jpg}
+    \caption{Schema del circuito del ponte di Wheatstone utilizzato.}
+    \label{fig:wheatstoneSchema}
+\end{figure}
+
 \section{Risultati e discussione}
-In questa sezione verranno riportati i dati raccolti e la relativa analisi statistica che ne ha permesso la determinazione delle incertezze.
 \subsection{DMM}
 
 \begin{table}[h]
@@ -73,12 +177,12 @@ La misura delle resistenze, effettuata con il multimetro della scheda Elvis, ha 
     \item range: scegliere il più opportuno tra i valori di resistenza proposti nella tabella. Il range scelto deve essere maggiore del valore della resistenza incognita.
 \end{itemize}
 
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=1.0\linewidth]{delta_r.png}
-%     \caption{\textit{Riga della tabella per il calcolo delle incertezze della resisteza presa dal manuale della scheda Elvis}}
-%     \label{fig:placeholder}
-% \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\linewidth]{figures/deltaR.jpg}
+    \caption{\textit{Riga della tabella per il calcolo delle incertezze della resisteza presa dal manuale della scheda Elvis}}
+    \label{fig:placeholder}
+\end{figure}
 
 Supponiamo di voler calcolare l'incertezza associata alla misura della resistenza da $15 \Omega$. In questo caso scegliamo il range di $100 \Omega$, ne consegue che $$\Delta\Omega = (450\cdot\frac{\text{reading}}{10^6} +310\cdot\frac{\text{range}}{10^6})$$.
 
@@ -106,12 +210,12 @@ $R_3$ & 15118.2 & 168.34 & 15127.59 & 86.88 \\ \hline
 $R_1 + R_2$ & 694.646 & 0.362106 & 694.33 & 0.17 \\ \hline
 $R_1 / R_2$ & 14.7315 & 0.0297885 & 14.73 & 0.01 \\ \hline
 \end{tabularx}
-\caption{Tabella dei valori delle resistenza con le rispettive incertezze. Le prime due colonne riportano l'output del programma di analisi dati scritto in LabView utilizzato durante la presa dati. Le ultime due colonne riportano le stesse grandezze ma ricavate mediante fit lineare effettuato in python.}
+\caption{Tabella dei valori delle resistenza con le rispettive incertezze. Le prime due colonne riportano l'output del programma di analisi dati scritto in LabVIEW utilizzato durante la presa dati. Le ultime due colonne riportano le stesse grandezze ma ricavate mediante fit lineare effettuato in python.}
 \label{tab:resistenze}
 \end{table}
 
 La misura delle resistenze mediante applicazione della legge di Ohm ha prodotto i risultati sopra riportati (Tabella 2).
-Il programma di acquisizione dati in LabView ha permesso di calcolare la resistenza mediante regressione lineare dei punti nel piano tensione(V) - corrente(I). La resistenza corrisponde infatti al reciproco del coefficiente angolare della retta del fit.
+Il programma di acquisizione dati in LabVIEW ha permesso di calcolare la resistenza mediante regressione lineare dei punti nel piano tensione(V) - corrente(I). La resistenza corrisponde infatti al reciproco del coefficiente angolare della retta del fit.
 Abbiamo rianalizzato i dati eseguendo un fit in python e ne abbiamo riportato i risultati nelle ultime due colonne (Tabella 2).
 
 \begin{figure}[H]
@@ -125,7 +229,7 @@ Durante la presa dati, si è osservato che, per la resistenza da $15\Omega$, per
 
 La misura dell'incertezza su R ricavata mediante fit è calcolata in 2 passaggi. In primo luogo il fit permette di ricavare l'incertezza sul coefficiente angolare a partire dalla matrice di covarianza del fit, dopodichè, sapendo che la resistenza è il reciproco del coefficiente angolare(m) è possibile propagare linearmente l'errore su m per ottenere quello sulla resistenza. $$\sigma_R = \left| \frac{dR}{dm} \right| \sigma_m = \frac{1}{m^2} \sigma_m = \frac{\sigma_m}{m^2}$$
 
-I valori delle incertezze sulle resistenze, misurate con applicazione della legge di Ohm, sono di natura statistica (a differenza di quelle strumentali del DMM). Come si può notare, la compatibilità delle misure di resistenza rispetto ai valori attesi è migliorata e si ottiene così la compatibilità per le resistenze da $15 \Omega$ e $15\text{k}\Omega$. Per le altre configurazioni, associamo la non compatibilità alla tolleranza del valore nominale delle resistenze. Possiamo invece notare che c'è compatibilità tra i dati elaborati dal programma LabView e quelli analizzati mediante fit.
+I valori delle incertezze sulle resistenze, misurate con applicazione della legge di Ohm, sono di natura statistica (a differenza di quelle strumentali del DMM). Come si può notare, la compatibilità delle misure di resistenza rispetto ai valori attesi è migliorata e si ottiene così la compatibilità per le resistenze da $15 \Omega$ e $15\text{k}\Omega$. Per le altre configurazioni, associamo la non compatibilità alla tolleranza del valore nominale delle resistenze. Possiamo invece notare che c'è compatibilità tra i dati elaborati dal programma LabVIEW e quelli analizzati mediante fit.
 
 
 \subsection{Ponte di Wheatstone}
@@ -158,16 +262,18 @@ Il valore e l'incertezza di $R_3$ sono dati dai risultati dell'analisi statistic
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.75\linewidth]{figures/istogramma_R_fit_gaussiano.pdf}
-    \caption{Istogramma normalizzato e fit gaussiano delle misure di resistenza. La $\sigma$ riportata è campionaria.}
-    \label{fig:placeholder}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\linewidth]{figures/istogramma_dV_fit_gaussiano.pdf}
-    \caption{Istogramma normalizzato e fit gaussiano delle misure di $V_w$. La $\sigma$ riportata è campionaria.}
-    \label{fig:placeholder}
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/istogramma_R_fit_gaussiano.pdf}
+        \caption{Istogramma normalizzato e fit gaussiano delle misure di resistenza. La $\sigma$ riportata è campionaria.}
+        \label{fig:placeholder1}
+    \end{minipage}\hfill
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/istogramma_dV_fit_gaussiano.pdf}
+        \caption{Istogramma normalizzato e fit gaussiano delle misure di $V_w$. La $\sigma$ riportata è campionaria.}
+        \label{fig:placeholder2}
+    \end{minipage}
 \end{figure}
 
 Nelle immagini sopra (Figure 2 e 3) sono riportati i grafici associati al fit gaussiano per di resistenza e tensione della resistenza da $15\Omega$.
@@ -177,8 +283,12 @@ Dall'ultima riga della tabella possiamo osservare che, variando la portata di $V
 
 Le misure di resistenza ricavate mediante il ponte di Wheatstone (Tabella 3) risultano compatibili, entro le incertezze sperimentali e la tolleranza dei valori di riferimento, con i valori nominali attesi.
 
+\section{Conclusione}
+L’analisi dei dati raccolti con le tre metodologie ha permesso di ottenere misure delle resistenze prese in esame compatibili con la misura di fabbricazione riportata sulle stesse, a meno dell’intervallo di tolleranza del valore della resistenza del $5\%$.
 
 
-
+\newpage
+\tableofcontents
+\newpage
 
 \end{document}
