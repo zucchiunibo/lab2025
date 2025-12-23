@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.18.1 (MiKTeX 24.4) (format=lualatex 2025.10.3)  22 DEC 2025 22:59
+This is LuaHBTeX, Version 1.18.1 (MiKTeX 24.4) (format=lualatex 2025.10.3)  23 DEC 2025 11:03
  restricted system commands enabled.
  file:line:error style messages enabled.
 **"c:/Users/simon/OneDrive/Studio/Università/Fisica/Anno II/Laboratorio di Ele
@@ -1836,7 +1836,7 @@ Here is how much of LuaTeX's memory you used:
  852 words of node memory still in use:
    7 hlist, 2 vlist, 2 rule, 5 glue, 4 kern, 1 glyph, 30 attribute, 105 glue_spe
 c, 17 attribute_list, 2 write nodes
-   avail lists: 1:5,2:874,3:274,4:79,5:1685,6:70,7:11257,8:33,9:604,10:24,11:160
+   avail lists: 1:5,2:884,3:274,4:79,5:1685,6:70,7:11257,8:33,9:607,10:24,11:160
 6
  67962 multiletter control sequences out of 65536+600000
  89 fonts using 8343695 bytes
@@ -1850,7 +1850,7 @@ ic/amsfonts/cm/cmmi8.pfb><C:/Users/simon/AppData/Local/Programs/MiKTeX/fonts/typ
 e1/public/amsfonts/cm/cmr10.pfb><C:/Users/simon/AppData/Local/Programs/MiKTeX/fo
 nts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/simon/AppData/Local/Programs/MiK
 TeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on main.pdf (6 pages, 4421553 bytes).
+Output written on main.pdf (6 pages, 4421807 bytes).
 
 PDF statistics: 288 PDF objects out of 1000 (max. 8388607)
  32 named destinations out of 1000 (max. 131072)

@@ -143,7 +143,7 @@ Dove $R_x$ è la resistenza che si vuole misurare.
 
 Mentre $R_1$ e $R_2$ sono resistenze fisse da $100 \; \Omega$, $R_3$ è un \textbf{potenziometro} che ci ha permesso di portare la differenza di potenziale $V_w$ prossima allo zero. Inoltre, $V_p$ e la corrente $i$ - misurata dall'amperometro - hanno permesso di misurare la resistenza del potenziometro contemporaneamente alla visualizzazione del grafico $(V_w,t)$ nel programma LabVIEW. Il circuito realizzato è in figura \ref{fig:wheatstoneCircuito}.
 
-Le resistenze da $100 \; \Omega$ non permettevano una misurazione accurata del resistore da $15 \; \text{k}\Omega$, quindi abbiamo variato il rapporto $R_1 / R_2$ per aumentare la portata del ponte di Wheatstone.
+Le resistenze da $100 \; \Omega$ non permettevano una misurazione accurata del resistore da $15 \; \text{k}\Omega$, quindi abbiamo variato il rapporto $R_1 / R_2$ (utilizzando opportunamente le resistenze da $15 \; \Omega$ e $670 \; \Omega$) per aumentare la portata del ponte di Wheatstone.
 
 Dopo aver eseguito le misurazione di ogni configurazione di resistori, è stato inoltre stimato il valore della \textbf{sensibilità del ponte}, cioè della derivata della tensione $V_w$ in funzione della resistenza $R_x$. Intorno al punto di bilanciamento, essa si ottiene con la seguente formula:
 
@@ -251,8 +251,8 @@ La misura dell'incertezza su R ricavata mediante fit è stata calcolata in 2 pas
     \sigma_R = \left| \frac{\text{d}R}{\text{d}m} \right| \sigma_m = \frac{1}{m^2} \sigma_m = \frac{\sigma_m}{m^2}
 \end{equation*}
 
-I valori delle incertezze sulle resistenze, misurate con applicazione della legge di Ohm, sono di \textbf{natura statistica }(a differenza di quelle strumentali del DMM). 
-Conseguenza di ciò è la \textbf{compatibilità maggiore} delle misure di resistenza con il valore atteso: mentre nel metodo DMM era necessario tener conto della tolleranza di fabbricazione per confermare la compatibilità delle misure, con questo metodo le misure sono compatibili direttamente con i valori attesi.
+I valori delle incertezze sulle resistenze, misurate con applicazione della legge di Ohm, sono di \textbf{natura statistica} (a differenza di quelle strumentali del DMM). 
+Mentre c'è piena compatibilità tra i risultati dei due metodi (con Python e LabVIEW), per confermare la \textbf{compatibilità} delle misure sui valori attesi è necessario tener conto della tolleranza del $5\%$ (tranne per $R_1$).
 
 \subsection{Ponte di Wheatstone}
 
@@ -298,16 +298,19 @@ Nelle figure \ref{fig:histoR} e \ref{fig:histoV} sono riportati i grafici associ
 \end{figure}
 
 Nell'ultima colonna della tabella \ref{tab:resistenzeWheatstone} è riportata la \textbf{sensibilità} del ponte, calcolata come nell'equazione \ref{eq:sensibilità}, dove $V_s$ è la tensione di alimentazione (impostata a $5 \;\text{V}$).
-Invece, il valore e l'incertezza di $R_3$ sono dati dai risultati dell'analisi statistica moltiplicati per il fattore moltiplicativo.
+Invece, il valore e l'incertezza di $R_3$ sono dati dai risultati dell'analisi statistica moltiplicati per il fattore moltiplicativo $R_1/R_2$.
 
-Dalla stessa tabella, si può notare che la sensibilità del ponte diminuisce con l'aumentare della resistenza; dunque, l'incertezza relativa tende a diminuire all’aumentare del valore misurato. Cià avviene perché la misura assoluta $\Delta R$ rimane approssimativamente costante, mentre il denominatore dell'equazione \ref{eq:wheatstone} R cresce.
+Dalla stessa tabella, si può notare che la sensibilità del ponte diminuisce (perciò aumenta la precisione) con l'aumentare della resistenza; dunque, l'incertezza relativa tende a diminuire all’aumentare del valore misurato. Ciò avviene perché la misura assoluta $\Delta R_x$ rimane approssimativamente costante, mentre il denominatore (dell'equazione \ref{eq:wheatstone}) $R_x$ cresce.
 
-Dall'ultima riga della tabella possiamo osservare che, variando la portata di $V_w$ e $V_0$, le incertezze rimangono uguali. Ciò probabilmente accade perchè la dispersione dei dati è dominata dal rumore elettronico di fondo e dalle fluttuazioni del ponte.
+Dall'ultima riga della tabella possiamo osservare che, variando la portata di $V_w$ e $V_0$, le incertezze rimangono uguali. Ciò potrebbe essere dovuto al fatto che la dispersione dei dati è dominata dal rumore elettronico di fondo e dalle fluttuazioni del ponte. Tuttavia, senza ulteriori misurazioni non è possibile decretarne con certezza la causa.
 
 Ricapitolando, le misure di resistenza ricavate mediante il ponte di Wheatstone risultano \textbf{compatibili}, entro le incertezze sperimentali e la tolleranza dei valori di riferimento, con i valori nominali attesi.
 
 \section{Conclusione}
-L’analisi dei dati raccolti con le tre metodologie ha permesso di ottenere misure delle resistenze compatibili con la misura di fabbricazione riportata sulle stesse in tutti e tre i casi. Mentre nei metodi basatosi sul DMM e sul ponte di Wheatstone è stato necessario prendere in esame la tolleranza di frabbricazione delle resistenze, il metodo statistico construito sulla legge di Ohm fornisce misure compatibili ai valori attesi puri.
+L’analisi dei dati raccolti con le tre metodologie ha permesso di ottenere misure 
+delle resistenze compatibili con la misura di fabbricazione riportata sulle stesse 
+in tutti e tre i casi. In tutte e tre le metodologie abbiamo dovuto tener conto delle tolleranze di fabbricazione
+dei resistori.
 
 
 \vspace{1cm}
