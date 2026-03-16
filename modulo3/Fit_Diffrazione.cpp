@@ -1,6 +1,5 @@
 #include "Fit_Diffrazione.h"
 
-
 /*****************************************************************************************
  *****************************************************************************************
  ** **
@@ -37,8 +36,8 @@ Double_t Diffrazione(double *x, double *par) {
   return Diffr;
 }
 
-void myfunc(double bkg = 0., double I0 = 1., double lambda = 600.E-9,
-            double d = 1.E-4, double x0 = 0.05, double L = 1.0) {
+void myfunc(double bkg = 0., double I0 = 1.41, double lambda = 678.E-9,
+            double d = 5.8E-5, double x0 = 0.0376, double L = 0.935) {
   TF1 *f1 = new TF1("myfunc", Diffrazione, x0 - 0.03, x0 + 0.03, 6);
   f1->SetParameter(0, d);
   f1->SetParameter(1, x0);
@@ -56,21 +55,30 @@ void myfunc(double bkg = 0., double I0 = 1., double lambda = 600.E-9,
 }
 
 void mydata(TString fname = "diff1(step100)") {
-  TGraph *data = new TGraphErrors(fname, "%lg %lg");
-  data->Draw("AP");
-  data->SetLineColor(4);
-  data->SetMarkerColor(4);
+  TCanvas *c1 = new TCanvas("c1", "Diffrazione", 800, 600);
+  c1->SetFillColor(0);
+  c1->SetGrid();
+  TGraphErrors *data = new TGraphErrors(fname, "%lg %lg");
   data->SetTitle("Figura di diffrazione");
-  data->GetXaxis()->SetTitle("Posizione, m");
-  data->GetYaxis()->SetTitle("Int. luminosa, unit. arb.");
-  data->GetXaxis()->CenterTitle(true);
-  data->GetXaxis()->CenterTitle(true);
-  data->SaveAs("Grafico.jpg");
+  data->SetMarkerStyle(20);
+  data->SetMarkerSize(0.5);
+  data->SetMarkerColor(kBlue + 2);
+  data->SetLineColor(kBlue + 2);
+  data->SetLineWidth(2);
+  data->GetXaxis()->SetTitle("Posizione [m]");
+  data->GetYaxis()->SetTitle("Intensita' luminosa [a.u.]");
+  data->GetXaxis()->CenterTitle();
+  data->GetYaxis()->CenterTitle();
+  data->GetXaxis()->SetTitleSize(0.05);
+  data->GetYaxis()->SetTitleSize(0.05);
+  data->GetXaxis()->SetLabelSize(0.04);
+  data->GetYaxis()->SetLabelSize(0.04);
+  data->Draw("AP");
+  c1->SaveAs("Diffrazione.jpg");
 }
 
-void myfit(TString fname = "diff1(step100)", double bkg = 0., double I0 = 1.,
-           double lambda = 600.E-9, double d = 1.E-4, double x0 = 0.05,
-           double L = 1.0) {
+void myfit(TString fname, double bkg, double I0, double lambda, double d,
+           double x0, double L) {
   TGraphErrors *data = new TGraphErrors(fname, "%lg %lg");
   TF1 *f1 = (TF1 *)gROOT->GetFunction("myfunc");
   f1->SetParameter(0, d);
@@ -83,10 +91,11 @@ void myfit(TString fname = "diff1(step100)", double bkg = 0., double I0 = 1.,
   f1->FixParameter(0, d);
   f1->FixParameter(2, L);
 
-       f1->SetParLimits(1,x0-0.001,x0+0.001);
-       f1->SetParLimits(4,I0-10., I0+10.);
-  //     f1->SetParLimits(5,bkg-5., bkg+5.);
+  f1->SetParLimits(1, x0 - 0.001, x0 + 0.001);
+  f1->SetParLimits(4, I0 - 10., I0 + 10.);
+  f1->SetParLimits(5, bkg - 5., bkg + 5.);
 
+  TCanvas *c2 = new TCanvas("c2", "Diffrazione_fit", 800, 600);
   data->Fit("myfunc", "R");
   data->Draw("AP");
   data->SetLineColor(4);
@@ -104,4 +113,5 @@ void myfit(TString fname = "diff1(step100)", double bkg = 0., double I0 = 1.,
   leg->AddEntry(data, "L= ... m, d=... mm", "p");
   leg->AddEntry(f1, "fit", "l");
   leg->Draw();
+  c2->SaveAs("Diffrazione_fit.jpg");
 }
