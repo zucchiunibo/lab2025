@@ -91,9 +91,9 @@ void myfit(TString fname, double bkg, double I0, double lambda, double d,
   f1->FixParameter(0, d);
   f1->FixParameter(2, L);
 
-  f1->SetParLimits(1, x0 - 0.001, x0 + 0.001);
-  f1->SetParLimits(4, I0 - 10., I0 + 10.);
-  f1->SetParLimits(5, bkg - 5., bkg + 5.);
+  // f1->SetParLimits(1, x0 - 0.001, x0 + 0.001);
+  // f1->SetParLimits(4, I0 - 10., I0 + 10.);
+  // f1->SetParLimits(5, bkg - 5., bkg + 5.);
 
   TCanvas *c2 = new TCanvas("c2", "Diffrazione_fit", 800, 600);
   data->Fit("myfunc", "R");
