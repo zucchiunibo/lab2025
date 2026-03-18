@@ -28,23 +28,38 @@ larghezza fenditura, shift lungo x, distanza fenditura - schermo) --> esegue il
 fit Tutte le grandezze sono in metri.
  ****************************************************************************************/
 
+// Double_t Diffrazione(double *x, double *par) {
+//   double Arg =
+//       TMath::Pi() * par[0] * (x[0] - par[1]) /
+//       TMath::Sqrt((x[0] - par[1]) * (x[0] - par[1]) + par[2] * par[2]) / par[3];
+//   double Diffr = par[5] + par[4] * sin(Arg) * sin(Arg) / Arg / Arg;
+//   return Diffr;
+// }
+
 Double_t Diffrazione(double *x, double *par) {
-  double Arg =
-      TMath::Pi() * par[0] * (x[0] - par[1]) /
-      TMath::Sqrt((x[0] - par[1]) * (x[0] - par[1]) + par[2] * par[2]) / par[3];
-  double Diffr = par[5] + par[4] * sin(Arg) * sin(Arg) / Arg / Arg;
-  return Diffr;
+    double dx = x[0] - par[1]; // x - x0
+    double Arg = TMath::Pi() * par[0] * dx / (par[2] * par[3]); // pi*a*(x-x0)/(L*lambda)
+
+    double sinc2;
+    if (fabs(Arg) < 1e-6)
+        sinc2 = 1.0; // limite centrale
+    else
+        sinc2 = TMath::Power(TMath::Sin(Arg)/Arg, 2);
+
+    double Diffr = par[5] + par[4] * sinc2;
+    return Diffr;
 }
 
-void myfunc(double bkg = 0., double I0 = 1.41, double lambda = 678.E-9,
-            double d = 5.8E-5, double x0 = 0.0376, double L = 0.935) {
-  TF1 *f1 = new TF1("myfunc", Diffrazione, x0 - 0.03, x0 + 0.03, 6);
-  f1->SetParameter(0, d);
-  f1->SetParameter(1, x0);
-  f1->SetParameter(2, L);
-  f1->SetParameter(3, lambda);
-  f1->SetParameter(4, I0);
-  f1->SetParameter(5, bkg);
+
+void myfunc(const FitParams &p) {
+  TF1 *f1 = new TF1("myfunc", Diffrazione, p.x0 - 0.03, p.x0 + 0.03, 6);
+  f1->SetParameter(0, p.d);
+  f1->SetParameter(1, p.x0);
+  f1->SetParameter(2, p.L);
+  f1->SetParameter(3, p.lambda);
+  f1->SetParameter(4, p.I0);
+  f1->SetParameter(5, p.bkg);
+  f1->SetNpx(1000);
   f1->SetParName(0, "Larghezza fenditura");
   f1->SetParName(1, "shift lungo x");
   f1->SetParName(2, "Distanza fenditura - schermo");
@@ -54,11 +69,11 @@ void myfunc(double bkg = 0., double I0 = 1.41, double lambda = 678.E-9,
   f1->Draw("same");
 }
 
-void mydata(TString fname = "diff1(step100)") {
+void mydata(const FitParams& p) {
   TCanvas *c1 = new TCanvas("c1", "Diffrazione", 800, 600);
   c1->SetFillColor(0);
   c1->SetGrid();
-  TGraphErrors *data = new TGraphErrors(fname, "%lg %lg");
+  TGraphErrors *data = new TGraphErrors(p.fname, "%lg %lg %lg");
   data->SetTitle("Figura di diffrazione");
   data->SetMarkerStyle(20);
   data->SetMarkerSize(0.5);
@@ -66,7 +81,7 @@ void mydata(TString fname = "diff1(step100)") {
   data->SetLineColor(kBlue + 2);
   data->SetLineWidth(2);
   data->GetXaxis()->SetTitle("Posizione [m]");
-  data->GetYaxis()->SetTitle("Intensita' luminosa [a.u.]");
+  data->GetYaxis()->SetTitle("Voltaggio (V)");
   data->GetXaxis()->CenterTitle();
   data->GetYaxis()->CenterTitle();
   data->GetXaxis()->SetTitleSize(0.05);
@@ -74,22 +89,20 @@ void mydata(TString fname = "diff1(step100)") {
   data->GetXaxis()->SetLabelSize(0.04);
   data->GetYaxis()->SetLabelSize(0.04);
   data->Draw("AP");
-  c1->SaveAs("Diffrazione.jpg");
+  c1->SaveAs("Diffrazione.pdf");
 }
 
-void myfit(TString fname, double bkg, double I0, double lambda, double d,
-           double x0, double L) {
-  TGraphErrors *data = new TGraphErrors(fname, "%lg %lg");
+void myfit(const FitParams &p) {
+  TGraphErrors *data = new TGraphErrors(p.fname, "%lg %lg %lg");
   TF1 *f1 = (TF1 *)gROOT->GetFunction("myfunc");
-  f1->SetParameter(0, d);
-  f1->SetParameter(1, x0);
-  f1->SetParameter(2, L);
-  f1->SetParameter(3, lambda);
-  f1->SetParameter(4, I0);
-  f1->SetParameter(5, bkg);
-
-  f1->FixParameter(0, d);
-  f1->FixParameter(2, L);
+  f1->SetParameter(0, p.d);
+  f1->SetParameter(1, p.x0);
+  f1->SetParameter(2, p.L);
+  f1->SetParameter(3, p.lambda);
+  f1->SetParameter(4, p.I0);
+  f1->SetParameter(5, p.bkg);
+  f1->FixParameter(0, p.d);
+  f1->FixParameter(2, p.L);
 
   // f1->SetParLimits(1, x0 - 0.001, x0 + 0.001);
   // f1->SetParLimits(4, I0 - 10., I0 + 10.);
@@ -103,15 +116,15 @@ void myfit(TString fname, double bkg, double I0, double lambda, double d,
   f1->Draw("same");
   data->SetTitle("Figura di diffrazione");
   data->GetXaxis()->SetTitle("Posizione, m");
-  data->GetYaxis()->SetTitle(" ");
+  data->GetYaxis()->SetTitle("Voltaggio (V)");
   data->GetXaxis()->CenterTitle(true);
   data->GetXaxis()->CenterTitle(true);
   TLegend *leg = new TLegend(.6, .7, .9, .9);
   leg->SetTextSize(0.04);
-  leg->SetBorderSize(0); // no border for legend
-  leg->SetFillColor(0);  // fill color is white
+  leg->SetBorderSize(0); 
+  leg->SetFillColor(0);  
   leg->AddEntry(data, "L= ... m, d=... mm", "p");
   leg->AddEntry(f1, "fit", "l");
   leg->Draw();
-  c2->SaveAs("Diffrazione_fit.jpg");
+  c2->SaveAs("Diffrazione_fit.pdf");
 }
