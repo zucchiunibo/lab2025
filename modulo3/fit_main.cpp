@@ -10,9 +10,9 @@ int main() {
   FitParams p4 = {
       "diff2.txt", 0., 1.33, 683.e-9, 5.8e-5, 0.037, 0.935};
 
-  mydata(p4);
-  myfunc(p4);
-  myfit(p4);
+  mydata(p3);
+  myfunc(p3);
+  myfit(p3);
 
   std::cout << "Fine!" << '\n';
 }
