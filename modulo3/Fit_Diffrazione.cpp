@@ -123,7 +123,7 @@ void myfit(const FitParams &p) {
   leg->SetTextSize(0.04);
   leg->SetBorderSize(0); 
   leg->SetFillColor(0);  
-  leg->AddEntry(data, "d = 101.0 mm", "p");
+  leg->AddEntry(data, "d = 5.8e-5 m", "p");
   leg->AddEntry(f1, "fit", "l");
   leg->Draw();
   c2->SaveAs("Diffrazione_fit.pdf");

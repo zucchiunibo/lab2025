@@ -1,0 +1,45 @@
+Diff3(step100)Fend1:
+Minimizer is Minuit2 / Migrad
+Chi2                      =      314.522
+NDf                       =          331
+Edm                       =   3.3689e-08
+NCalls                    =           97
+Larghezza fenditura       =     0.000101                         (fixed)
+shift lungo x             =    0.0377369   +/-   2.06294e-06 
+Distanza fenditura - schermo =        0.935                              (fixed)
+Lambda                    =   7.0652e-07   +/-   5.66235e-10 
+Normalizzazione           =      3.69588   +/-   0.00313383  
+fondo                     =  -0.00307207   +/-   0.000965742 
+
+
+
+diff2:
+Minimizer is Minuit2 / Migrad
+Chi2                      =      49.7398
+NDf                       =          112
+Edm                       =  6.28554e-12
+NCalls                    =           98
+Larghezza fenditura       =      5.8e-05                         (fixed)
+shift lungo x             =    0.0371449   +/-   1.55853e-05 
+Distanza fenditura - schermo =        0.935                              (fixed)
+Lambda                    =  6.73021e-07   +/-   2.46969e-09 
+Normalizzazione           =      1.31635   +/-   0.00472701  
+fondo                     =     0.015273   +/-   0.00160617  
+
+
+
+
+diff3:
+Minimizer is Minuit2 / Migrad
+Chi2                      =      63.1966
+NDf                       =          111
+Edm                       =  1.19524e-06
+NCalls                    =           98
+Larghezza fenditura       =      5.8e-05                         (fixed)
+shift lungo x             =    0.0371581   +/-   1.51828e-05 
+Distanza fenditura - schermo =        0.935                              (fixed)
+Lambda                    =  6.74767e-07   +/-   2.42434e-09 
+Normalizzazione           =       1.3531   +/-   0.00473358  
+fondo                     =    0.0111274   +/-   0.0016158   
+
+
