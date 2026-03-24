@@ -10,6 +10,7 @@
 #include <TRandom.h>
 #include <fstream>
 #include <iostream>
+#include <TStyle.h>
 #include <vector>
 
 struct FitParams {
@@ -29,3 +30,5 @@ void myfunc(const FitParams& p);
 void mydata(const FitParams& p);
 
 void myfit(const FitParams& p);
+
+void grafico(TString filename);
