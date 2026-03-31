@@ -1,45 +1,65 @@
+diff1(step100):
+Chi2                      =      432.752
+NDf                       =          421
+Edm                       =  5.29671e-11
+NCalls                    =          122
+Larghezza fenditura       =  5.80502e-05   +/-   4.27781e-07 
+shift lungo x             =    0.0378004   +/-   2.8621e-06  
+Distanza fenditura - schermo =      0.93419   +/-   0.006893    
+Lambda                    =  6.76414e-07   +/-   4.99098e-09 
+Normalizzazione           =          1.4                         (fixed)
+fondo                     =   0.00183769   +/-   0.000363871 
+
+
+Diff2(step100):
+Chi2                      =      499.252
+NDf                       =          421
+Edm                       =  2.08874e-08
+NCalls                    =          112
+Larghezza fenditura       =  5.86013e-05   +/-   4.29694e-07 
+shift lungo x             =      0.03781   +/-   2.84113e-06 
+Distanza fenditura - schermo =     0.924801   +/-   0.00679089  
+Lambda                    =  6.87419e-07   +/-   5.04778e-09 
+Normalizzazione           =         1.42                         (fixed)
+fondo                     =  -0.00113805   +/-   0.000365281
+
+
 Diff3(step100)Fend1:
-Minimizer is Minuit2 / Migrad
-Chi2                      =      314.522
-NDf                       =          331
-Edm                       =   3.3689e-08
-NCalls                    =           97
-Larghezza fenditura       =     0.000101                         (fixed)
-shift lungo x             =    0.0377369   +/-   2.06294e-06 
-Distanza fenditura - schermo =        0.935                              (fixed)
-Lambda                    =   7.0652e-07   +/-   5.66235e-10 
-Normalizzazione           =      3.69588   +/-   0.00313383  
-fondo                     =  -0.00307207   +/-   0.000965742 
+Chi2                      =      637.367
+NDf                       =          330
+Edm                       =  4.83952e-10
+NCalls                    =          109
+Larghezza fenditura       =  0.000100798   +/-   6.51061e-07 
+shift lungo x             =    0.0377367   +/-   1.53875e-06 
+Distanza fenditura - schermo =     0.936865   +/-   0.00606103  
+Lambda                    =    7.034e-07   +/-   4.55063e-09 
+Normalizzazione           =       3.7012                         (fixed)
+fondo                     =  -0.00352806   +/-   0.000656405 
 
 
 
 diff2:
-Minimizer is Minuit2 / Migrad
-Chi2                      =      49.7398
-NDf                       =          112
-Edm                       =  6.28554e-12
-NCalls                    =           98
-Larghezza fenditura       =      5.8e-05                         (fixed)
-shift lungo x             =    0.0371449   +/-   1.55853e-05 
-Distanza fenditura - schermo =        0.935                              (fixed)
-Lambda                    =  6.73021e-07   +/-   2.46969e-09 
-Normalizzazione           =      1.31635   +/-   0.00472701  
-fondo                     =     0.015273   +/-   0.00160617  
-
-
+Chi2                      =      116.394
+NDf                       =          111
+Edm                       =  1.09606e-08
+NCalls                    =          109
+Larghezza fenditura       =  5.83563e-05   +/-   1.71533e-06 
+shift lungo x             =    0.0371447   +/-   1.10083e-05 
+Distanza fenditura - schermo =     0.929213   +/-   0.0273718   
+Lambda                    =  6.78773e-07   +/-   1.99946e-08 
+Normalizzazione           =         1.33                         (fixed)
+fondo                     =    0.0138216   +/-   0.00106914  
 
 
 diff3:
-Minimizer is Minuit2 / Migrad
-Chi2                      =      63.1966
-NDf                       =          111
-Edm                       =  1.19524e-06
-NCalls                    =           98
-Larghezza fenditura       =      5.8e-05                         (fixed)
-shift lungo x             =    0.0371581   +/-   1.51828e-05 
-Distanza fenditura - schermo =        0.935                              (fixed)
-Lambda                    =  6.74767e-07   +/-   2.42434e-09 
-Normalizzazione           =       1.3531   +/-   0.00473358  
-fondo                     =    0.0111274   +/-   0.0016158   
-
+Chi2                      =      242.533
+NDf                       =          110
+Edm                       =  1.54236e-07
+NCalls                    =          109
+Larghezza fenditura       =  5.92364e-05   +/-   1.68423e-06 
+shift lungo x             =    0.0371583   +/-   1.06156e-05 
+Distanza fenditura - schermo =     0.913936   +/-   0.0260682   
+Lambda                    =  6.97915e-07   +/-   1.99067e-08 
+Normalizzazione           =         1.39                         (fixed)
+fondo                     =   0.00719696   +/-   0.00107723                   
 

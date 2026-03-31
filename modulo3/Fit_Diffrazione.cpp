@@ -101,7 +101,8 @@ void myfit(const FitParams &p) {
   f1->SetParameter(3, p.lambda);
   f1->SetParameter(4, p.I0);
   f1->SetParameter(5, p.bkg);
-  f1->FixParameter(0, p.d);
+  f1->FixParameter(4, p.I0);
+  //f1->FixParameter(0, p.d);
   //f1->FixParameter(2, p.L);
 
   // f1->SetParLimits(1, x0 - 0.001, x0 + 0.001);
